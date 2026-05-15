@@ -160,7 +160,7 @@
         .boss-hand-label { font-size: 0.65rem; color: #aaa; }
         .boss-hand-emoji { font-size: 2.4rem; }
 
-        .timer-track { height: 5px; background: rgba(255,255,255,0.15); overflow: hidden; width: 100%; }
+        .timer-track { height: 5px; background: rgba(255,255,255,0.15); overflow: hidden; width: 100%; position: relative; z-index: 10; }
         .timer-fill  { height: 100%; border-radius: 3px; transition: width 40ms linear; }
 
         /* ── 結果メッセージ ── */
@@ -579,13 +579,13 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID",
-    measurementId: "YOUR_MEASUREMENT_ID"
+    apiKey: "AIzaSyDFukbr_tgjgXQb-uZKbhzJYxxYRh1k298",
+    authDomain: "settai-jyanken.firebaseapp.com",
+    projectId: "settai-jyanken",
+    storageBucket: "settai-jyanken.firebasestorage.app",
+    messagingSenderId: "821366022028",
+    appId: "1:821366022028:web:c26bf892517b06cbfd40a9",
+    measurementId: "G-LXZ7H3ZCSK"
 };
 
 const firebaseState = {
@@ -680,6 +680,7 @@ const MOOD_INIT    = 65;
 const MOOD_SUCCESS = +12;
 const MOOD_FAIL    = -20;
 const SUCCESS_GOAL = 5;
+const RANKINGS_ENABLED = false;
 
 // ── ステージ定義 ───────────────────────────────────────────────
 const STAGES = [
@@ -1319,8 +1320,13 @@ function showEnd(type) {
         if (isFinal) {
             const clearTimeSec = stopRunTimer();
             trackEvent('game_clear', { clear_time_sec: clearTimeSec });
-            b.textContent = 'ランキングへ';
-            pendingOverlayAction = 'ranking-entry';
+            if (RANKINGS_ENABLED) {
+                b.textContent = 'ランキングへ';
+                pendingOverlayAction = 'ranking-entry';
+            } else {
+                b.textContent = '最初から';
+                pendingOverlayAction = 'restart';
+            }
         } else {
             b.textContent = '次のステージへ';
             pendingOverlayAction = 'next';
