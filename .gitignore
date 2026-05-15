@@ -1,0 +1,12 @@
+.DS_Store
+候補/
+候補選択.html
+**/候補/
+**/janken/
+**/.claude/
+**/.ai/
+work-log_*.md
+asset-prompts.md
+backgrounds/title_confrontation*.png
+backgrounds/background_executive_office.png
+backgrounds/background.png
