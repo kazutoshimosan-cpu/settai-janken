@@ -1827,6 +1827,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
 
 // ── Boot ──────────────────────────────────────────────────────
 function startGame() {
+    trackEvent('game_start');
     hide('title-screen');
     init(0);
 }
