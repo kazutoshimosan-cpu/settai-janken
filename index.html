@@ -682,6 +682,34 @@ const MOOD_FAIL    = -20;
 const SUCCESS_GOAL = 5;
 const RANKINGS_ENABLED = true;
 
+// ── Sound Engine ──────────────────────────────────────────────
+const SND = (() => {
+    let ctx = null;
+    function cx() {
+        if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+        return ctx;
+    }
+    function t(freq, type, dur, vol = 0.28, delay = 0) {
+        const c = cx(), now = c.currentTime + delay;
+        const o = c.createOscillator(), g = c.createGain();
+        o.connect(g); g.connect(c.destination);
+        o.type = type; o.frequency.setValueAtTime(freq, now);
+        g.gain.setValueAtTime(vol, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + dur);
+        o.start(now); o.stop(now + dur);
+    }
+    return {
+        tap()      { t(700,  'square',   0.04, 0.15); },
+        ok()       { [[440,0],[554,.08],[660,.16],[880,.24]].forEach(([f,d])=>t(f,'square',0.14,0.2,d)); },
+        fail()     { t(220,'sawtooth',0.10,0.22); t(160,'sawtooth',0.22,0.18,0.09); },
+        clear()    { [[523,0],[659,.1],[784,.2],[1047,.32]].forEach(([f,d])=>t(f,'square',0.17,0.22,d)); },
+        gameover() { [[380,0],[280,.15],[190,.32],[130,.5]].forEach(([f,d])=>t(f,'sawtooth',0.2,0.2,d)); },
+        dogeza()   { t(500+Math.random()*300,'sine',0.07,0.2); },
+        warn()     { t(880,'square',0.05,0.10); },
+    };
+})();
+
 // ── ステージ定義 ───────────────────────────────────────────────
 const STAGES = [
     {
@@ -1196,10 +1224,12 @@ function startTimer() {
     gs.timerPct = 1.0;
     const steps = stage().activeMs / TICK_MS;
     const dec = 1 / steps;
+    let warnPlayed = false;
     gs.activeTid = setInterval(() => {
         gs.timerPct = Math.max(0, gs.timerPct - dec);
         const c = gs.timerPct > 0.5 ? '#4ecca3' : gs.timerPct > 0.25 ? '#ffd700' : '#e94560';
         setTimerBar(gs.timerPct, c);
+        if (!warnPlayed && gs.timerPct <= 0.25) { warnPlayed = true; SND.warn(); }
         if (gs.timerPct <= 0) {
             clearInterval(gs.activeTid); gs.activeTid = null;
             if (gs.phase === 'active') onFail('⏰ 時間切れ！ もっと速く！');
@@ -1208,6 +1238,7 @@ function startTimer() {
 }
 
 function pick(hand) {
+    SND.tap();
     if (gs.phase === 'flashing') {
         killTimers(); gs.phase = 'judging'; setBtns(false);
         onFail('❌ 早まった！ 最後の指示を待て！');
@@ -1230,6 +1261,7 @@ function pick(hand) {
 }
 
 function onSuccess() {
+    SND.ok();
     gs.mood = Math.min(100, gs.mood + MOOD_SUCCESS);
     gs.ok++;
     updateMood(); updateStars();
@@ -1244,6 +1276,7 @@ function onSuccess() {
 }
 
 function onFail(msg) {
+    SND.fail();
     setBattleMode(false);
     setCat('lose'); setBoss('happy');
     setBubble(stage().dialogue.lose, false, '#222', true);
@@ -1275,6 +1308,7 @@ function startDogeza() {
 
 function dogezaTap() {
     if (gs.phase !== 'dogeza') return;
+    SND.dogeza();
     gs.dogezaCount++;
     setText('dogeza-cnt', `(${gs.dogezaCount}/${DOGEZA_NEED})`);
     if (gs.dogezaCount >= DOGEZA_NEED) {
@@ -1318,6 +1352,7 @@ function showEnd(type) {
             ? `「${s.dialogue.clear}」\n\n全員接待成功！\n昇格：${s.promotion}\n\nネコ社員、ついに干支入り。`
             : `「${s.dialogue.clear}」\n\n昇格：${s.promotion}\n\n${s.next}`;
         if (isFinal) {
+            SND.clear();
             const clearTimeSec = stopRunTimer();
             trackEvent('game_clear', { clear_time_sec: clearTimeSec });
             if (RANKINGS_ENABLED) {
@@ -1332,6 +1367,7 @@ function showEnd(type) {
             pendingOverlayAction = 'next';
         }
     } else {
+        SND.gameover();
         trackEvent('stage_fail', stageParams());
         t.textContent = '💢 即クビ！！'; t.style.color = '#e94560';
         m.textContent = `「お前はもう来なくていい！！！」\n\n${s.name}の機嫌を完全に損ねてしまった。\n……干支には入れなかったままだ。`;
@@ -1765,6 +1801,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
 
 // ── Boot ──────────────────────────────────────────────────────
 function startGame() {
+    SND.tap();
     hide('title-screen');
     init(0);
 }
