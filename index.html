@@ -354,6 +354,45 @@
 
         .hidden { display: none !important; }
 
+        /* ── バカ演出アニメーション ── */
+        @keyframes instr-slam {
+            0%   { transform: scale(2.4); opacity: 0.5; }
+            55%  { transform: scale(0.92); opacity: 1; }
+            80%  { transform: scale(1.06); }
+            100% { transform: scale(1); }
+        }
+        .bubble.slam { animation: instr-slam 0.28s cubic-bezier(0.15, 1.6, 0.4, 1) forwards; }
+        .bubble.final-instr { font-size: 3rem !important; font-weight: 900 !important; letter-spacing: 0.05em; }
+
+        @keyframes boss-rage {
+            0%   { transform: translateX(-50%) scale(1); }
+            28%  { transform: translateX(-50%) scale(2.4); }
+            42%  { transform: translateX(calc(-50% - 14px)) scale(2.3); }
+            56%  { transform: translateX(calc(-50% + 14px)) scale(2.4); }
+            70%  { transform: translateX(calc(-50% - 9px)) scale(2.3); }
+            84%  { transform: translateX(calc(-50% + 9px)) scale(2.35); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+        .boss-img.rage { animation: boss-rage 0.75s ease forwards; z-index: 15; }
+
+        @keyframes cat-victory {
+            0%   { transform: scale(1) rotate(0deg); }
+            30%  { transform: scale(3.2) rotate(18deg); }
+            55%  { transform: scale(2.8) rotate(-12deg); }
+            75%  { transform: scale(3.0) rotate(10deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        .cat-portrait.victory { animation: cat-victory 0.65s ease forwards; z-index: 20; }
+
+        @keyframes mood-damage {
+            0%,100% { transform: translateX(0); }
+            18% { transform: translateX(-10px); }
+            36% { transform: translateX(10px); }
+            54% { transform: translateX(-7px); }
+            72% { transform: translateX(7px); }
+        }
+        .mood-wrap.shaking { animation: mood-damage 0.42s ease; }
+
         /* Title screen */
         #title-screen {
             position: fixed; inset: 0; z-index: 200;
@@ -668,6 +707,7 @@ const HI = {
 };
 const INSTRS = ['win','lose','draw'];
 const IL = {win:'勝て！', lose:'負けろ！', draw:'あいこ！'};
+const FINAL_INSTRS = new Set(Object.values(IL));
 const IC = {win:'#e94560', lose:'#4ecca3', draw:'#ff9a3c'};
 
 const FLASH_MS   = 190;
@@ -1074,6 +1114,13 @@ function setBubble(txt, flashing, color, isDialogue = false) {
     $('instr-txt').style.color = color;
     $('bubble').classList.toggle('flashing', flashing);
     $('bubble').classList.toggle('dialogue', isDialogue);
+    const isFinal = !flashing && !isDialogue && FINAL_INSTRS.has(txt);
+    $('bubble').classList.toggle('final-instr', isFinal);
+    if (isFinal) {
+        $('bubble').classList.remove('slam');
+        void $('bubble').offsetHeight;
+        $('bubble').classList.add('slam');
+    }
 }
 
 function setBattleMode(on) {
@@ -1235,6 +1282,11 @@ function onSuccess() {
     updateMood(); updateStars();
     setBattleMode(false);
     setCat('win'); setBoss('angry');
+    const catEl = $('cat-img');
+    catEl.classList.remove('victory');
+    void catEl.offsetHeight;
+    catEl.classList.add('victory');
+    catEl.addEventListener('animationend', () => catEl.classList.remove('victory'), { once: true });
     setBubble(stage().dialogue.win, false, '#222', true);
     setText('result-msg', '✅ ナイス接待！');
     $('result-msg').style.color = '#4ecca3';
@@ -1246,6 +1298,11 @@ function onSuccess() {
 function onFail(msg) {
     setBattleMode(false);
     setCat('lose'); setBoss('happy');
+    const bossEl = $('boss-img');
+    bossEl.classList.remove('rage');
+    void bossEl.offsetHeight;
+    bossEl.classList.add('rage');
+    bossEl.addEventListener('animationend', () => bossEl.classList.remove('rage'), { once: true });
     setBubble(stage().dialogue.lose, false, '#222', true);
     setText('result-msg', msg);
     $('result-msg').style.color = '#ff6b6b';
@@ -1290,6 +1347,11 @@ function dogezaTap() {
 function applyPenalty() {
     gs.mood = Math.max(0, gs.mood + MOOD_FAIL);
     updateMood();
+    const moodEl = document.querySelector('.mood-wrap');
+    moodEl.classList.remove('shaking');
+    void moodEl.offsetHeight;
+    moodEl.classList.add('shaking');
+    moodEl.addEventListener('animationend', () => moodEl.classList.remove('shaking'), { once: true });
     if (gs.mood <= 0) {
         setTimeout(() => showEnd('gameover'), 500);
     } else if (checkDragonAd()) {
