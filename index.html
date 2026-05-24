@@ -306,6 +306,23 @@
 
         .hidden { display: none !important; }
 
+        .sound-toggle {
+            position: fixed;
+            top: 12px;
+            right: 92px;
+            z-index: 320;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255,255,255,0.28);
+            border-radius: 50%;
+            background: rgba(0,0,0,0.58);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+        }
+
         /* Title screen */
         #title-screen {
             position: fixed; inset: 0; z-index: 200;
@@ -506,6 +523,7 @@
     </style>
 </head>
 <body>
+<button class="sound-toggle" id="sound-toggle" type="button" onclick="toggleSound(event)" aria-label="音を切り替え">♪</button>
 <div class="game" id="game">
 
     <!-- HUD -->
@@ -589,7 +607,7 @@
     <div class="opening-frame" onclick="nextOpeningPanel()">
         <img id="opening-img" class="opening-img" src="opening/panels/opening_01_cat_arrives.png" alt="オープニング">
         <div class="opening-ui">
-            <div class="opening-count" id="opening-count">1/7</div>
+            <div class="opening-count" id="opening-count">1/10</div>
             <button class="opening-skip" type="button" onclick="skipOpening(event)">スキップ</button>
         </div>
         <div class="opening-dialogue">
@@ -649,6 +667,22 @@ const MOOD_INIT    = 65;
 const MOOD_SUCCESS = +12;
 const MOOD_FAIL    = -20;
 const SUCCESS_GOAL = 5;
+
+// ── Sound ────────────────────────────────────────────────────
+const SOUND_KEY = 'settaiJankenSoundMuted';
+let audioCtx = null;
+let masterGain = null;
+let musicTimer = null;
+let musicMode = 'off';
+let musicStep = 0;
+let soundMuted = localStorage.getItem(SOUND_KEY) === '1';
+
+const MUSIC = {
+    opening: { bpm: 84,  wave: 'triangle', gain: 0.055, notes: [392, 0, 440, 494, 523, 0, 494, 440] },
+    title:   { bpm: 112, wave: 'square',   gain: 0.045, notes: [262, 330, 392, 523, 392, 330, 294, 392] },
+    game:    { bpm: 148, wave: 'square',   gain: 0.038, notes: [196, 247, 262, 247, 294, 247, 262, 220] },
+    ending:  { bpm: 96,  wave: 'triangle', gain: 0.06,  notes: [392, 494, 587, 659, 587, 494, 440, 392] },
+};
 
 // ── ステージ定義 ───────────────────────────────────────────────
 const STAGES = [
@@ -1044,7 +1078,98 @@ function hide(id)        { $(id).classList.add('hidden'); }
 function showDogeza()    { $('dogeza-wrap').style.visibility = 'visible'; }
 function hideDogeza()    { $('dogeza-wrap').style.visibility = 'hidden'; }
 
+function setupAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = soundMuted ? 0 : 0.72;
+    masterGain.connect(audioCtx.destination);
+    updateSoundButton();
+}
+
+function unlockAudio() {
+    setupAudio();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    if (!soundMuted && musicMode !== 'off' && !musicTimer) startMusicLoop();
+}
+
+function updateSoundButton() {
+    const btn = $('sound-toggle');
+    if (!btn) return;
+    btn.textContent = soundMuted ? '×' : '♪';
+    btn.setAttribute('aria-label', soundMuted ? '音を出す' : '音を消す');
+}
+
+function toggleSound(e) {
+    e.stopPropagation();
+    setupAudio();
+    soundMuted = !soundMuted;
+    localStorage.setItem(SOUND_KEY, soundMuted ? '1' : '0');
+    masterGain.gain.setTargetAtTime(soundMuted ? 0 : 0.72, audioCtx.currentTime, 0.02);
+    updateSoundButton();
+    if (!soundMuted) {
+        unlockAudio();
+        playSfx('tap');
+    }
+}
+
+function playTone(freq, dur = 0.1, gain = 0.08, type = 'square') {
+    if (!audioCtx || soundMuted || !freq) return;
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(gain, now + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    osc.connect(g);
+    g.connect(masterGain);
+    osc.start(now);
+    osc.stop(now + dur + 0.02);
+}
+
+function playSfx(kind) {
+    unlockAudio();
+    if (kind === 'ok') {
+        playTone(659, 0.08, 0.09, 'triangle');
+        setTimeout(() => playTone(880, 0.11, 0.08, 'triangle'), 70);
+    } else if (kind === 'fail') {
+        playTone(180, 0.12, 0.09, 'sawtooth');
+        setTimeout(() => playTone(120, 0.16, 0.08, 'sawtooth'), 90);
+    } else if (kind === 'tap') {
+        playTone(740, 0.04, 0.035, 'triangle');
+    } else if (kind === 'start') {
+        [392, 523, 659].forEach((n, i) => setTimeout(() => playTone(n, 0.08, 0.07, 'square'), i * 75));
+    }
+}
+
+function setMusic(mode) {
+    musicMode = mode;
+    musicStep = 0;
+    if (musicTimer) {
+        clearInterval(musicTimer);
+        musicTimer = null;
+    }
+    if (mode !== 'off' && audioCtx && audioCtx.state === 'running' && !soundMuted) startMusicLoop();
+}
+
+function startMusicLoop() {
+    const song = MUSIC[musicMode];
+    if (!song) return;
+    const interval = 60000 / song.bpm;
+    const tick = () => {
+        const note = song.notes[musicStep % song.notes.length];
+        if (note) playTone(note, interval / 1000 * 0.62, song.gain, song.wave);
+        if (musicStep % 4 === 0) playTone(note / 2, interval / 1000 * 0.48, song.gain * 0.55, 'sine');
+        musicStep++;
+    };
+    tick();
+    musicTimer = setInterval(tick, interval);
+}
+
 function showOpening() {
+    setMusic('opening');
     openingIndex = 0;
     renderOpeningPanel();
     hide('title-screen');
@@ -1060,10 +1185,12 @@ function renderOpeningPanel() {
 }
 
 function nextOpeningPanel() {
+    playSfx('tap');
     openingIndex += 1;
     if (openingIndex >= OPENING_PANELS.length) {
         hide('opening-screen');
         show('title-screen');
+        setMusic('title');
         return;
     }
     renderOpeningPanel();
@@ -1071,12 +1198,15 @@ function nextOpeningPanel() {
 
 function skipOpening(e) {
     e.stopPropagation();
+    playSfx('tap');
     hide('opening-screen');
     show('title-screen');
+    setMusic('title');
 }
 
 function showEnding() {
     killTimers();
+    setMusic('ending');
     endingIndex = 0;
     renderEndingPanel();
     hide('overlay');
@@ -1092,10 +1222,12 @@ function renderEndingPanel() {
 }
 
 function nextEndingPanel() {
+    playSfx('tap');
     endingIndex += 1;
     if (endingIndex >= ENDING_PANELS.length) {
         hide('ending-screen');
         show('title-screen');
+        setMusic('title');
         return;
     }
     renderEndingPanel();
@@ -1103,8 +1235,10 @@ function nextEndingPanel() {
 
 function skipEnding(e) {
     e.stopPropagation();
+    playSfx('tap');
     hide('ending-screen');
     show('title-screen');
+    setMusic('title');
 }
 
 function setCat(state) {
@@ -1315,6 +1449,7 @@ function pick(hand) {
 }
 
 function onSuccess() {
+    playSfx('ok');
     gs.mood = Math.min(100, gs.mood + MOOD_SUCCESS);
     gs.ok++;
     updateMood(); updateStars();
@@ -1329,6 +1464,7 @@ function onSuccess() {
 }
 
 function onFail(msg) {
+    playSfx('fail');
     setBattleMode(false);
     setCat('lose'); setBoss('happy');
     setBubble(stage().dialogue.lose, false, '#222', true);
@@ -1415,11 +1551,15 @@ function showEnd(type) {
 }
 
 function overlayAction() {
+    playSfx('tap');
     if (pendingOverlayAction === 'next') {
+        setMusic('game');
         init(currentStageIndex + 1);
     } else if (pendingOverlayAction === 'restart') {
+        setMusic('game');
         init(0);
     } else {
+        setMusic('game');
         init(currentStageIndex);
     }
 }
@@ -1712,15 +1852,21 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
 
 // ── Boot ──────────────────────────────────────────────────────
 function startGame() {
+    unlockAudio();
+    playSfx('start');
+    setMusic('game');
     hide('title-screen');
     init(0);
 }
 
 const _params = new URLSearchParams(location.search);
 const _startStage = parseInt(_params.get('s')) || 0;
+setupAudio();
+document.addEventListener('pointerdown', unlockAudio, { once: true });
 if (_params.get('ending') === '1') {
     showEnding();
 } else if (_startStage > 0) {
+    setMusic('game');
     init(_startStage - 1);
 } else {
     showOpening();
