@@ -1,4 +1,4 @@
-const CACHE = 'settai-janken-v11';
+const CACHE = 'settai-janken-v12';
 const ASSETS = [
   './',
   './index.html',
@@ -54,6 +54,21 @@ const ASSETS = [
   './backgrounds/background_senior_executive_office重役室.png',
   './backgrounds/background_executive_office_employee_view社長室.png',
   './backgrounds/title_bg.png',
+  './opening/backgrounds/opening_bg_construction_morning.png',
+  './opening/panels/opening_01_cat_arrives.png',
+  './opening/panels/opening_02_rat_appears_v3.png',
+  './opening/panels/opening_03_rat_explains.png',
+  './opening/panels/opening_04_settai_janken_reveal.png',
+  './opening/panels/opening_05_rule_is_not_simple.png',
+  './opening/panels/opening_06_read_the_room.png',
+  './opening/panels/opening_07_long_day_begins.png',
+  './ending/backgrounds/ending_bg_construction_morning.png',
+  './ending/backgrounds/ending_bg_executive_office.png',
+  './ending/panels/ending_01_dragon_grants.png',
+  './ending/panels/ending_02_cat_reacts.png',
+  './ending/panels/ending_03_all_bosses.png',
+  './ending/panels/ending_04_rat_wrapup.png',
+  './ending/panels/ending_05_tomorrow.png',
 ];
 
 self.addEventListener('install', e => {
@@ -71,6 +86,11 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  if (e.request.mode === 'navigate') {
+    e.respondWith(fetch(e.request).catch(() => caches.match('./index.html')));
+    return;
+  }
+
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request))
   );
