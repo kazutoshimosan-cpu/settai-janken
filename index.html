@@ -685,10 +685,18 @@ let musicStep = 0;
 let soundMuted = localStorage.getItem(SOUND_KEY) === '1';
 
 const MUSIC = {
-    opening: { bpm: 84,  wave: 'triangle', gain: 0.055, notes: [392, 0, 440, 494, 523, 0, 494, 440] },
+    opening: {
+        bpm: 92, wave: 'triangle', gain: 0.047,
+        notes: [392, 440, 494, 0, 523, 494, 440, 392, 330, 392, 440, 494, 440, 392, 330, 0],
+        chords: [[262, 330, 392], [196, 294, 392], [220, 262, 330], [175, 262, 349]],
+    },
     title:   { bpm: 112, wave: 'square',   gain: 0.045, notes: [262, 330, 392, 523, 392, 330, 294, 392] },
     game:    { bpm: 148, wave: 'square',   gain: 0.038, notes: [196, 247, 262, 247, 294, 247, 262, 220] },
-    ending:  { bpm: 96,  wave: 'triangle', gain: 0.06,  notes: [392, 494, 587, 659, 587, 494, 440, 392] },
+    ending:  {
+        bpm: 86, wave: 'triangle', gain: 0.052,
+        notes: [523, 494, 440, 392, 440, 392, 330, 0, 392, 440, 494, 440, 392, 330, 294, 0],
+        chords: [[262, 330, 392], [220, 262, 330], [175, 262, 349], [196, 294, 392]],
+    },
 };
 
 // ── ステージ定義 ───────────────────────────────────────────────
@@ -1168,7 +1176,15 @@ function startMusicLoop() {
     const tick = () => {
         const note = song.notes[musicStep % song.notes.length];
         if (note) playTone(note, interval / 1000 * 0.62, song.gain, song.wave);
-        if (musicStep % 4 === 0) playTone(note / 2, interval / 1000 * 0.48, song.gain * 0.55, 'sine');
+        if (musicStep % 4 === 0) {
+            const chord = song.chords?.[(musicStep / 4) % song.chords.length];
+            if (chord) {
+                chord.forEach((freq, i) => playTone(freq, interval / 1000 * 1.85, song.gain * (0.18 - i * 0.025), 'sine'));
+                playTone(chord[0] / 2, interval / 1000 * 1.7, song.gain * 0.32, 'triangle');
+            } else {
+                playTone(note / 2, interval / 1000 * 0.48, song.gain * 0.55, 'sine');
+            }
+        }
         musicStep++;
     };
     tick();
