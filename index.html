@@ -160,7 +160,7 @@
         .boss-hand-label { font-size: 0.65rem; color: #aaa; }
         .boss-hand-emoji { font-size: 2.4rem; }
 
-        .timer-track { height: 5px; background: rgba(255,255,255,0.15); overflow: hidden; width: 100%; position: relative; z-index: 10; }
+        .timer-track { height: 5px; background: rgba(255,255,255,0.15); overflow: hidden; width: 100%; }
         .timer-fill  { height: 100%; border-radius: 3px; transition: width 40ms linear; }
 
         /* ── 結果メッセージ ── */
@@ -303,95 +303,8 @@
         .ov-msg   { font-size: 0.83rem; color: #aaa; line-height: 1.75; white-space: pre-line; margin-bottom: 22px; }
         .ov-btn   { background: #e94560; color: white; border: none; border-radius: 8px; padding: 11px 34px; font-size: 0.95rem; cursor: pointer; }
         .ov-btn:hover { opacity: 0.82; }
-        .rank-input {
-            width: 100%;
-            border: 2px solid #4ecca3;
-            border-radius: 8px;
-            background: #0f172a;
-            color: #fff;
-            font-size: 1rem;
-            padding: 11px 12px;
-            margin: 8px 0 14px;
-            text-align: center;
-        }
-        .rank-link {
-            display: inline-block;
-            margin-top: 14px;
-            color: #aaa;
-            font-size: 0.82rem;
-            text-decoration: underline;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-        .rank-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
-            margin-bottom: 18px;
-            text-align: left;
-        }
-        .rank-row {
-            display: grid;
-            grid-template-columns: 2.3em 1fr 4.8em;
-            gap: 7px;
-            align-items: center;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 8px;
-            padding: 8px 9px;
-            color: #ddd;
-            font-size: 0.82rem;
-        }
-        .rank-row.mine {
-            border-color: #4ecca3;
-            background: rgba(78,204,163,0.16);
-            color: #fff;
-        }
-        .rank-time { text-align: right; font-variant-numeric: tabular-nums; }
-        .rank-empty { color: #aaa; margin-bottom: 18px; }
 
         .hidden { display: none !important; }
-
-        /* ── バカ演出アニメーション ── */
-        @keyframes instr-slam {
-            0%   { transform: scale(2.4); opacity: 0.5; }
-            55%  { transform: scale(0.92); opacity: 1; }
-            80%  { transform: scale(1.06); }
-            100% { transform: scale(1); }
-        }
-        .bubble.slam { animation: instr-slam 0.28s cubic-bezier(0.15, 1.6, 0.4, 1) forwards; }
-        .bubble.final-instr { font-size: 3rem !important; font-weight: 900 !important; letter-spacing: 0.05em; }
-
-        @keyframes boss-rage {
-            0%   { transform: translateX(-50%) scale(1); }
-            28%  { transform: translateX(-50%) scale(2.4); }
-            42%  { transform: translateX(calc(-50% - 14px)) scale(2.3); }
-            56%  { transform: translateX(calc(-50% + 14px)) scale(2.4); }
-            70%  { transform: translateX(calc(-50% - 9px)) scale(2.3); }
-            84%  { transform: translateX(calc(-50% + 9px)) scale(2.35); }
-            100% { transform: translateX(-50%) scale(1); }
-        }
-        .boss-img.rage { animation: boss-rage 0.75s ease forwards; z-index: 15; }
-
-        @keyframes cat-victory {
-            0%   { transform: scale(1) rotate(0deg); }
-            30%  { transform: scale(3.2) rotate(18deg); }
-            55%  { transform: scale(2.8) rotate(-12deg); }
-            75%  { transform: scale(3.0) rotate(10deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-        .cat-portrait.victory { animation: cat-victory 0.65s ease forwards; z-index: 20; }
-
-        @keyframes mood-damage {
-            0%,100% { transform: translateX(0); }
-            18% { transform: translateX(-10px); }
-            36% { transform: translateX(10px); }
-            54% { transform: translateX(-7px); }
-            72% { transform: translateX(7px); }
-        }
-        .mood-wrap.shaking { animation: mood-damage 0.42s ease; }
 
         /* Title screen */
         #title-screen {
@@ -424,6 +337,87 @@
             transition: transform 0.1s, box-shadow 0.1s;
         }
         .title-btn:active { transform: scale(0.94); box-shadow: 0 2px 10px rgba(78,204,163,0.3); }
+
+        /* Opening kamishibai */
+        #opening-screen,
+        #ending-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 260;
+            background: #080812;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        .opening-frame {
+            position: relative;
+            width: 100vw;
+            max-width: 420px;
+            height: 100vh;
+            max-height: 860px;
+            overflow: hidden;
+            background: #111;
+        }
+        .opening-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.18s ease;
+        }
+        .opening-dialogue {
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            top: 64px;
+            z-index: 2;
+            min-height: 116px;
+            padding: 14px 16px 16px;
+            border: 2px solid rgba(255,255,255,0.88);
+            border-radius: 12px;
+            background: rgba(10, 12, 22, 0.88);
+            color: #fff;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+        }
+        .opening-speaker {
+            color: #4ecca3;
+            font-size: 0.78rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+        .opening-line {
+            font-size: 1rem;
+            font-weight: 800;
+            line-height: 1.55;
+            white-space: pre-line;
+        }
+        .opening-ui {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            z-index: 3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none;
+        }
+        .opening-count,
+        .opening-skip {
+            background: rgba(0,0,0,0.58);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.28);
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 7px 10px;
+        }
+        .opening-skip {
+            pointer-events: auto;
+            cursor: pointer;
+        }
 
         /* ── Snake scroll banner ── */
         .snake-scroll {
@@ -590,6 +584,36 @@
 </div>
 
 <!-- ゲームオーバーオーバーレイ -->
+<!-- オープニング紙芝居 -->
+<div id="opening-screen" class="hidden">
+    <div class="opening-frame" onclick="nextOpeningPanel()">
+        <img id="opening-img" class="opening-img" src="opening/panels/opening_01_cat_arrives.png" alt="オープニング">
+        <div class="opening-ui">
+            <div class="opening-count" id="opening-count">1/7</div>
+            <button class="opening-skip" type="button" onclick="skipOpening(event)">スキップ</button>
+        </div>
+        <div class="opening-dialogue">
+            <div class="opening-speaker" id="opening-speaker">ナレーション</div>
+            <div class="opening-line" id="opening-line">ここは、十二支建設。今日も現場は、朝から大忙し。</div>
+        </div>
+    </div>
+</div>
+
+<!-- エンディング紙芝居 -->
+<div id="ending-screen" class="hidden">
+    <div class="opening-frame" onclick="nextEndingPanel()">
+        <img id="ending-img" class="opening-img" src="ending/panels/ending_01_dragon_grants.png" alt="エンディング">
+        <div class="opening-ui">
+            <div class="opening-count" id="ending-count">1/5</div>
+            <button class="opening-skip" type="button" onclick="skipEnding(event)">タイトルへ</button>
+        </div>
+        <div class="opening-dialogue">
+            <div class="opening-speaker" id="ending-speaker">タツ社長</div>
+            <div class="opening-line" id="ending-line">……干支に、入れてやろう</div>
+        </div>
+    </div>
+</div>
+
 <!-- タイトル画面 -->
 <div id="title-screen" class="hidden">
     <button class="title-btn" onclick="startGame()">は じ め る</button>
@@ -603,100 +627,6 @@
     </div>
 </div>
 
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
-import { getAnalytics, isSupported, logEvent } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js';
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    limit,
-    orderBy,
-    query,
-    serverTimestamp,
-} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
-
-const firebaseConfig = {
-    apiKey: "AIzaSyDFukbr_tgjgXQb-uZKbhzJYxxYRh1k298",
-    authDomain: "settai-jyanken.firebaseapp.com",
-    projectId: "settai-jyanken",
-    storageBucket: "settai-jyanken.firebasestorage.app",
-    messagingSenderId: "821366022028",
-    appId: "1:821366022028:web:c26bf892517b06cbfd40a9",
-    measurementId: "G-LXZ7H3ZCSK"
-};
-
-const firebaseState = {
-    app: null,
-    analytics: null,
-    db: null,
-    ready: false,
-};
-const analyticsQueue = [];
-const hasRealFirebaseConfig = !firebaseConfig.apiKey.startsWith('YOUR_')
-    && !firebaseConfig.projectId.startsWith('YOUR_')
-    && !firebaseConfig.appId.startsWith('YOUR_');
-
-function sendAnalyticsEvent(name, params) {
-    if (!firebaseState.analytics) return;
-    try {
-        logEvent(firebaseState.analytics, name, params);
-    } catch (err) {
-        console.warn('Analytics event skipped:', err);
-    }
-}
-
-try {
-    if (hasRealFirebaseConfig) {
-        firebaseState.app = initializeApp(firebaseConfig);
-        firebaseState.db = getFirestore(firebaseState.app);
-        firebaseState.ready = true;
-        isSupported().then(supported => {
-            if (supported) {
-                firebaseState.analytics = getAnalytics(firebaseState.app);
-                analyticsQueue.splice(0).forEach(({ name, params }) => sendAnalyticsEvent(name, params));
-            }
-        }).catch(() => {});
-    } else {
-        console.info('Firebase config is placeholder. Analytics and rankings are disabled until configured.');
-    }
-} catch (err) {
-    console.warn('Firebase initialization skipped:', err);
-}
-
-window.SettaiFirebase = {
-    log(name, params = {}) {
-        if (firebaseState.analytics) {
-            sendAnalyticsEvent(name, params);
-        } else if (firebaseState.app && analyticsQueue.length < 30) {
-            analyticsQueue.push({ name, params });
-        }
-    },
-    async addRanking({ nickname, stage, time_sec }) {
-        if (!firebaseState.db) throw new Error('Firestore is not ready.');
-        const ref = await addDoc(collection(firebaseState.db, 'rankings'), {
-            nickname,
-            stage,
-            time_sec,
-            created_at: serverTimestamp(),
-        });
-        return ref.id;
-    },
-    async getTopRankings() {
-        if (!firebaseState.db) throw new Error('Firestore is not ready.');
-        const q = query(
-            collection(firebaseState.db, 'rankings'),
-            orderBy('stage', 'desc'),
-            orderBy('time_sec', 'asc'),
-            limit(10)
-        );
-        const snap = await getDocs(q);
-        return snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    },
-};
-</script>
-
 <script>
 // ── Constants ─────────────────────────────────────────────────
 const HANDS = ['goo','choki','paa'];
@@ -707,7 +637,6 @@ const HI = {
 };
 const INSTRS = ['win','lose','draw'];
 const IL = {win:'勝て！', lose:'負けろ！', draw:'あいこ！'};
-const FINAL_INSTRS = new Set(Object.values(IL));
 const IC = {win:'#e94560', lose:'#4ecca3', draw:'#ff9a3c'};
 
 const FLASH_MS   = 190;
@@ -720,7 +649,6 @@ const MOOD_INIT    = 65;
 const MOOD_SUCCESS = +12;
 const MOOD_FAIL    = -20;
 const SUCCESS_GOAL = 5;
-const RANKINGS_ENABLED = true;
 
 // ── ステージ定義 ───────────────────────────────────────────────
 const STAGES = [
@@ -729,7 +657,7 @@ const STAGES = [
         title: 'ステージ1: ネズミ先輩',
         hint: '⚡ 最後の指示だけが正解！途中で押したらアウト！',
         bg: 'backgrounds/background_construction.png',
-        label: '先輩の手 👇', activeMs: 2500, flashN: 4,
+        label: '先輩の手 👇', activeMs: 1500, flashN: 4,
         promotion: '新入社員 → 現場作業員 🔨',
         next: '次は【ウシ班長】の「スロー＆ドッカン」が待っている……',
         imgs: {
@@ -769,7 +697,7 @@ const STAGES = [
         title: 'ステージ3: トラ職長',
         hint: '🐯 無言の圧に負けるな。指示を読んで即対応！',
         bg: 'backgrounds/background_construction.png',
-        label: '職長の手 👇', activeMs: 2000, flashN: 3,
+        label: '職長の手 👇', activeMs: 1500, flashN: 3,
         promotion: '班長見習い → 現場リーダー補佐 📋',
         next: '次は【イノシシ現場監督】の猪突猛進が来る……',
         imgs: {
@@ -792,7 +720,7 @@ const STAGES = [
         title: 'ステージ4: イノシシ現場監督',
         hint: '🐗 突進に備えろ！ボタンが消えても諦めるな！',
         bg: 'backgrounds/background_construction.png',
-        label: '監督の手 👇', activeMs: 2000, flashN: 3,
+        label: '監督の手 👇', activeMs: 1500, flashN: 3,
         promotion: '現場リーダー補佐 → 現場完走者 🏗️',
         next: '次は【ウサギ受付嬢】の高速フェイクだ……',
         imgs: {
@@ -983,42 +911,97 @@ const CAT_IMGS = {
 let gs;
 let currentStageIndex = 0;
 let pendingOverlayAction = 'retry';
-let runStartedAt = null;
-let finalClearTimeSec = null;
-let latestRankingId = null;
-let latestRankingEntry = null;
+let openingIndex = 0;
+let endingIndex = 0;
+
+const OPENING_PANELS = [
+    {
+        img: 'opening/panels/opening_01_cat_arrives.png',
+        speaker: 'ナレーション',
+        line: 'ここは、十二支建設。今日も現場は、朝から大忙し。',
+    },
+    {
+        img: 'opening/panels/opening_02_rat_appears_v3.png',
+        speaker: 'ネズミ先輩',
+        line: 'お、ネコ。\nちょうどいいところに来たな',
+    },
+    {
+        img: 'opening/panels/opening_03_rat_explains.png',
+        speaker: 'ネズミ先輩',
+        line: 'うちで出世したいなら、\nまず覚えることがある',
+    },
+    {
+        img: 'opening/panels/opening_03_rat_explains.png',
+        speaker: 'ネコ社員',
+        line: '安全確認ですか？',
+    },
+    {
+        img: 'opening/panels/opening_04_settai_janken_reveal.png',
+        speaker: 'ネズミ先輩',
+        line: '違う。\n接待じゃんけんだ',
+    },
+    {
+        img: 'opening/panels/opening_05_rule_is_not_simple.png',
+        speaker: 'ネズミ先輩',
+        line: '勝てばいいってもんじゃない。\n負ければいいってもんでもない',
+    },
+    {
+        img: 'opening/panels/opening_05_rule_is_not_simple.png',
+        speaker: 'ネコ社員',
+        line: 'え、じゃあ何を出せば……',
+    },
+    {
+        img: 'opening/panels/opening_06_read_the_room.png',
+        speaker: 'ネズミ先輩',
+        line: '上司の顔色を見ろ。\n指示を聞け。空気を読め',
+    },
+    {
+        img: 'opening/panels/opening_06_read_the_room.png',
+        speaker: 'ネコ社員',
+        line: 'それ、じゃんけんですか？',
+    },
+    {
+        img: 'opening/panels/opening_07_long_day_begins.png',
+        speaker: 'ナレーション',
+        line: 'ネコ社員の、長い一日が始まる。',
+    },
+];
+
+const ENDING_PANELS = [
+    {
+        img: 'ending/panels/ending_01_dragon_grants.png',
+        speaker: 'タツ社長',
+        line: '……干支に、入れてやろう',
+    },
+    {
+        img: 'ending/panels/ending_02_cat_reacts.png',
+        speaker: 'ネコ社員',
+        line: 'えっ、ほんまですか！？',
+    },
+    {
+        img: 'ending/panels/ending_03_all_bosses.png',
+        speaker: 'ナレーション',
+        line: 'こうしてネコ社員は、\n全上司への接待をやり切った。',
+    },
+    {
+        img: 'ending/panels/ending_04_rat_wrapup.png',
+        speaker: 'ネズミ先輩',
+        line: 'まさか本当に上まで行くとはな。\n……まあ、明日からも現場はあるけどな',
+    },
+    {
+        img: 'ending/panels/ending_05_tomorrow.png',
+        speaker: 'ナレーション',
+        line: 'ネコ社員の一日は終わった。\nそして、十二支建設の朝はまた来る。',
+    },
+];
 
 function stage() {
     return STAGES[currentStageIndex];
 }
 
-function stageParams() {
-    const s = stage();
-    return { stage_num: s.no, stage_key: s.key };
-}
-
-function trackEvent(name, params = {}) {
-    window.SettaiFirebase?.log(name, params);
-}
-
-function startRunTimer(stageIndex) {
-    if (stageIndex === 0 || !runStartedAt) {
-        runStartedAt = performance.now();
-        finalClearTimeSec = null;
-        latestRankingId = null;
-        latestRankingEntry = null;
-    }
-}
-
-function stopRunTimer() {
-    finalClearTimeSec = runStartedAt ? Number(((performance.now() - runStartedAt) / 1000).toFixed(1)) : 0;
-    return finalClearTimeSec;
-}
-
 function init(stageIndex = currentStageIndex) {
     killTimers();
     currentStageIndex = Math.max(0, Math.min(stageIndex, STAGES.length - 1));
-    startRunTimer(currentStageIndex);
     gs = {
         mood: MOOD_INIT, ok: 0,
         phase: 'idle',
@@ -1050,7 +1033,6 @@ function init(stageIndex = currentStageIndex) {
     setBtns(false);
     updateMood();
     updateStars();
-    trackEvent('stage_start', stageParams());
     setTimeout(nextRound, 1200);
 }
 
@@ -1061,6 +1043,69 @@ function show(id)        { $(id).classList.remove('hidden'); }
 function hide(id)        { $(id).classList.add('hidden'); }
 function showDogeza()    { $('dogeza-wrap').style.visibility = 'visible'; }
 function hideDogeza()    { $('dogeza-wrap').style.visibility = 'hidden'; }
+
+function showOpening() {
+    openingIndex = 0;
+    renderOpeningPanel();
+    hide('title-screen');
+    show('opening-screen');
+}
+
+function renderOpeningPanel() {
+    const panel = OPENING_PANELS[openingIndex];
+    $('opening-img').src = panel.img;
+    $('opening-speaker').textContent = panel.speaker;
+    $('opening-line').textContent = panel.line;
+    $('opening-count').textContent = `${openingIndex + 1}/${OPENING_PANELS.length}`;
+}
+
+function nextOpeningPanel() {
+    openingIndex += 1;
+    if (openingIndex >= OPENING_PANELS.length) {
+        hide('opening-screen');
+        show('title-screen');
+        return;
+    }
+    renderOpeningPanel();
+}
+
+function skipOpening(e) {
+    e.stopPropagation();
+    hide('opening-screen');
+    show('title-screen');
+}
+
+function showEnding() {
+    killTimers();
+    endingIndex = 0;
+    renderEndingPanel();
+    hide('overlay');
+    show('ending-screen');
+}
+
+function renderEndingPanel() {
+    const panel = ENDING_PANELS[endingIndex];
+    $('ending-img').src = panel.img;
+    $('ending-speaker').textContent = panel.speaker;
+    $('ending-line').textContent = panel.line;
+    $('ending-count').textContent = `${endingIndex + 1}/${ENDING_PANELS.length}`;
+}
+
+function nextEndingPanel() {
+    endingIndex += 1;
+    if (endingIndex >= ENDING_PANELS.length) {
+        hide('ending-screen');
+        show('title-screen');
+        return;
+    }
+    renderEndingPanel();
+}
+
+function skipEnding(e) {
+    e.stopPropagation();
+    hide('ending-screen');
+    show('title-screen');
+}
 
 function setCat(state) {
     const el = $('cat-img');
@@ -1114,13 +1159,6 @@ function setBubble(txt, flashing, color, isDialogue = false) {
     $('instr-txt').style.color = color;
     $('bubble').classList.toggle('flashing', flashing);
     $('bubble').classList.toggle('dialogue', isDialogue);
-    const isFinal = !flashing && !isDialogue && FINAL_INSTRS.has(txt);
-    $('bubble').classList.toggle('final-instr', isFinal);
-    if (isFinal) {
-        $('bubble').classList.remove('slam');
-        void $('bubble').offsetHeight;
-        $('bubble').classList.add('slam');
-    }
 }
 
 function setBattleMode(on) {
@@ -1282,11 +1320,6 @@ function onSuccess() {
     updateMood(); updateStars();
     setBattleMode(false);
     setCat('win'); setBoss('angry');
-    const catEl = $('cat-img');
-    catEl.classList.remove('victory');
-    void catEl.offsetHeight;
-    catEl.classList.add('victory');
-    catEl.addEventListener('animationend', () => catEl.classList.remove('victory'), { once: true });
     setBubble(stage().dialogue.win, false, '#222', true);
     setText('result-msg', '✅ ナイス接待！');
     $('result-msg').style.color = '#4ecca3';
@@ -1298,11 +1331,6 @@ function onSuccess() {
 function onFail(msg) {
     setBattleMode(false);
     setCat('lose'); setBoss('happy');
-    const bossEl = $('boss-img');
-    bossEl.classList.remove('rage');
-    void bossEl.offsetHeight;
-    bossEl.classList.add('rage');
-    bossEl.addEventListener('animationend', () => bossEl.classList.remove('rage'), { once: true });
     setBubble(stage().dialogue.lose, false, '#222', true);
     setText('result-msg', msg);
     $('result-msg').style.color = '#ff6b6b';
@@ -1347,11 +1375,6 @@ function dogezaTap() {
 function applyPenalty() {
     gs.mood = Math.max(0, gs.mood + MOOD_FAIL);
     updateMood();
-    const moodEl = document.querySelector('.mood-wrap');
-    moodEl.classList.remove('shaking');
-    void moodEl.offsetHeight;
-    moodEl.classList.add('shaking');
-    moodEl.addEventListener('animationend', () => moodEl.classList.remove('shaking'), { once: true });
     if (gs.mood <= 0) {
         setTimeout(() => showEnd('gameover'), 500);
     } else if (checkDragonAd()) {
@@ -1369,35 +1392,23 @@ function showEnd(type) {
     setBoss(type === 'gameover' ? 'happy' : 'angry');
     const s = stage();
     const isFinal = currentStageIndex >= STAGES.length - 1;
-    const t = $('ov-title'), m = $('ov-msg'), b = $('ov-btn');
-    b.disabled = false;
-    b.onclick = overlayAction;
+    if (type === 'clear' && isFinal) {
+        showEnding();
+        return;
+    }
+    const t = $('ov-title'), m = $('ov-msg');
     if (type === 'clear') {
-        trackEvent('stage_clear', stageParams());
         t.textContent = isFinal ? '🏆 完全制覇！' : '🎉 ステージクリア！';
         t.style.color = '#4ecca3';
         m.textContent = isFinal
             ? `「${s.dialogue.clear}」\n\n全員接待成功！\n昇格：${s.promotion}\n\nネコ社員、ついに干支入り。`
             : `「${s.dialogue.clear}」\n\n昇格：${s.promotion}\n\n${s.next}`;
-        if (isFinal) {
-            const clearTimeSec = stopRunTimer();
-            trackEvent('game_clear', { clear_time_sec: clearTimeSec });
-            if (RANKINGS_ENABLED) {
-                b.textContent = 'ランキングへ';
-                pendingOverlayAction = 'ranking-entry';
-            } else {
-                b.textContent = '最初から';
-                pendingOverlayAction = 'restart';
-            }
-        } else {
-            b.textContent = '次のステージへ';
-            pendingOverlayAction = 'next';
-        }
+        $('ov-btn').textContent = isFinal ? '最初から' : '次のステージへ';
+        pendingOverlayAction = isFinal ? 'restart' : 'next';
     } else {
-        trackEvent('stage_fail', stageParams());
         t.textContent = '💢 即クビ！！'; t.style.color = '#e94560';
         m.textContent = `「お前はもう来なくていい！！！」\n\n${s.name}の機嫌を完全に損ねてしまった。\n……干支には入れなかったままだ。`;
-        b.textContent = '同じステージを再挑戦';
+        $('ov-btn').textContent = '同じステージを再挑戦';
         pendingOverlayAction = 'retry';
     }
     show('overlay');
@@ -1406,137 +1417,11 @@ function showEnd(type) {
 function overlayAction() {
     if (pendingOverlayAction === 'next') {
         init(currentStageIndex + 1);
-    } else if (pendingOverlayAction === 'ranking-entry') {
-        showRankingEntry();
     } else if (pendingOverlayAction === 'restart') {
         init(0);
     } else {
         init(currentStageIndex);
     }
-}
-
-function showRankingEntry() {
-    const t = $('ov-title'), m = $('ov-msg'), b = $('ov-btn');
-    t.textContent = 'ランキング登録';
-    t.style.color = '#4ecca3';
-    m.innerHTML = '';
-
-    const time = finalClearTimeSec ?? stopRunTimer();
-    const lead = document.createElement('div');
-    lead.textContent = `クリアタイム：${time.toFixed(1)}秒`;
-    m.appendChild(lead);
-
-    const input = document.createElement('input');
-    input.id = 'ranking-nickname';
-    input.className = 'rank-input';
-    input.type = 'text';
-    input.maxLength = 8;
-    input.placeholder = 'ニックネーム';
-    input.autocomplete = 'nickname';
-    m.appendChild(input);
-
-    const status = document.createElement('div');
-    status.id = 'ranking-status';
-    status.textContent = '';
-    m.appendChild(status);
-
-    const skip = document.createElement('button');
-    skip.type = 'button';
-    skip.className = 'rank-link';
-    skip.textContent = 'スキップ';
-    skip.addEventListener('click', () => showRankingBoard());
-    m.appendChild(skip);
-
-    b.textContent = 'ランキングに登録する';
-    b.onclick = submitRanking;
-    input.focus();
-}
-
-async function submitRanking() {
-    const input = $('ranking-nickname');
-    const status = $('ranking-status');
-    const nickname = (input?.value || '').trim().slice(0, 8);
-    if (!nickname) {
-        status.textContent = 'ニックネームを入力してください';
-        return;
-    }
-
-    const b = $('ov-btn');
-    b.disabled = true;
-    b.textContent = '登録中...';
-    status.textContent = '';
-
-    try {
-        const timeSec = finalClearTimeSec ?? stopRunTimer();
-        latestRankingId = await window.SettaiFirebase.addRanking({
-            nickname,
-            stage: STAGES.length,
-            time_sec: timeSec,
-        });
-        latestRankingEntry = { id: latestRankingId, nickname, stage: STAGES.length, time_sec: timeSec };
-    } catch (err) {
-        console.warn('Ranking registration failed:', err);
-        status.textContent = '登録に失敗しました。設定を確認してください。';
-        b.disabled = false;
-        b.textContent = 'ランキングに登録する';
-        return;
-    }
-
-    b.disabled = false;
-    showRankingBoard();
-}
-
-async function showRankingBoard() {
-    const t = $('ov-title'), m = $('ov-msg'), b = $('ov-btn');
-    t.textContent = 'ランキング';
-    t.style.color = '#ffd700';
-    m.textContent = '読み込み中...';
-    b.disabled = true;
-    b.textContent = 'もう一度遊ぶ';
-    b.onclick = () => init(0);
-
-    let rows = [];
-    try {
-        rows = await window.SettaiFirebase.getTopRankings();
-    } catch (err) {
-        console.warn('Ranking fetch failed:', err);
-        m.textContent = 'ランキングを読み込めませんでした。Firebase設定を確認してください。';
-        b.disabled = false;
-        return;
-    }
-
-    m.innerHTML = '';
-    if (!rows.length) {
-        const empty = document.createElement('div');
-        empty.className = 'rank-empty';
-        empty.textContent = 'まだランキングはありません';
-        m.appendChild(empty);
-    } else {
-        const list = document.createElement('ol');
-        list.className = 'rank-list';
-        const visibleRows = [...rows];
-        if (latestRankingEntry && !visibleRows.some(row => row.id === latestRankingId)) {
-            visibleRows.push({ ...latestRankingEntry, rankLabel: '今回' });
-        }
-        visibleRows.forEach((row, idx) => {
-            const item = document.createElement('li');
-            item.className = `rank-row${row.id === latestRankingId ? ' mine' : ''}`;
-
-            const rank = document.createElement('span');
-            rank.textContent = row.rankLabel || `${idx + 1}.`;
-            const name = document.createElement('span');
-            name.textContent = `${row.nickname || '名無し'} / Stage ${row.stage ?? '-'}`;
-            const time = document.createElement('span');
-            time.className = 'rank-time';
-            time.textContent = `${Number(row.time_sec || 0).toFixed(1)}秒`;
-
-            item.append(rank, name, time);
-            list.appendChild(item);
-        });
-        m.appendChild(list);
-    }
-
-    b.disabled = false;
 }
 
 // ── Snake ギミック ─────────────────────────────────────────────
@@ -1827,16 +1712,18 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
 
 // ── Boot ──────────────────────────────────────────────────────
 function startGame() {
-    trackEvent('game_start');
     hide('title-screen');
     init(0);
 }
 
-const _startStage = parseInt(new URLSearchParams(location.search).get('s')) || 0;
-if (_startStage > 0) {
+const _params = new URLSearchParams(location.search);
+const _startStage = parseInt(_params.get('s')) || 0;
+if (_params.get('ending') === '1') {
+    showEnding();
+} else if (_startStage > 0) {
     init(_startStage - 1);
 } else {
-    show('title-screen');
+    showOpening();
 }
 </script>
 </body>
