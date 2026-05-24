@@ -677,8 +677,10 @@ const SUCCESS_GOAL = 5;
 
 // ── Sound ────────────────────────────────────────────────────
 const SOUND_KEY = 'settaiJankenSoundMuted';
+const CUTSCENE_AUDIO_SRC = 'audio/opening-ending.mp3';
 let audioCtx = null;
 let masterGain = null;
+let cutsceneAudio = null;
 let musicTimer = null;
 let musicMode = 'off';
 let musicStep = 0;
@@ -1099,13 +1101,18 @@ function setupAudio() {
     masterGain = audioCtx.createGain();
     masterGain.gain.value = soundMuted ? 0 : 0.72;
     masterGain.connect(audioCtx.destination);
+    cutsceneAudio = new Audio(CUTSCENE_AUDIO_SRC);
+    cutsceneAudio.loop = true;
+    cutsceneAudio.preload = 'auto';
+    cutsceneAudio.volume = soundMuted ? 0 : 0.55;
     updateSoundButton();
 }
 
 function unlockAudio() {
     setupAudio();
     if (audioCtx.state === 'suspended') audioCtx.resume();
-    if (!soundMuted && musicMode !== 'off' && !musicTimer) startMusicLoop();
+    if (!soundMuted && musicMode !== 'off' && !musicTimer && !isCutsceneMusic(musicMode)) startMusicLoop();
+    if (!soundMuted && isCutsceneMusic(musicMode)) playCutsceneAudio();
 }
 
 function updateSoundButton() {
@@ -1121,6 +1128,8 @@ function toggleSound(e) {
     soundMuted = !soundMuted;
     localStorage.setItem(SOUND_KEY, soundMuted ? '1' : '0');
     masterGain.gain.setTargetAtTime(soundMuted ? 0 : 0.72, audioCtx.currentTime, 0.02);
+    cutsceneAudio.volume = soundMuted ? 0 : 0.55;
+    if (soundMuted) pauseCutsceneAudio();
     updateSoundButton();
     if (!soundMuted) {
         unlockAudio();
@@ -1162,11 +1171,40 @@ function playSfx(kind) {
 function setMusic(mode) {
     musicMode = mode;
     musicStep = 0;
+    const cutscene = isCutsceneMusic(mode);
     if (musicTimer) {
         clearInterval(musicTimer);
         musicTimer = null;
     }
+    if (cutscene) {
+        stopGeneratedMusic();
+        if (audioCtx && audioCtx.state === 'running' && !soundMuted) playCutsceneAudio(true);
+        return;
+    }
+    pauseCutsceneAudio();
     if (mode !== 'off' && audioCtx && audioCtx.state === 'running' && !soundMuted) startMusicLoop();
+}
+
+function isCutsceneMusic(mode) {
+    return mode === 'opening' || mode === 'ending';
+}
+
+function stopGeneratedMusic() {
+    if (musicTimer) {
+        clearInterval(musicTimer);
+        musicTimer = null;
+    }
+}
+
+function playCutsceneAudio(restart = false) {
+    if (!cutsceneAudio || soundMuted) return;
+    if (restart) cutsceneAudio.currentTime = 0;
+    cutsceneAudio.play().catch(() => {});
+}
+
+function pauseCutsceneAudio() {
+    if (!cutsceneAudio) return;
+    cutsceneAudio.pause();
 }
 
 function startMusicLoop() {

@@ -1,8 +1,9 @@
-const CACHE = 'settai-janken-v14';
+const CACHE = 'settai-janken-v15';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
+  './audio/opening-ending.mp3',
   './characters/cat/cat_normal.png',
   './characters/cat/cat_win.png',
   './characters/cat/cat_lose.png',
