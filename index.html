@@ -679,6 +679,8 @@ const SUCCESS_GOAL = 5;
 const SOUND_KEY = 'settaiJankenSoundMuted';
 const CUTSCENE_AUDIO_SRC = 'audio/opening-ending.mp3';
 const GAMEPLAY_AUDIO_SRC = 'audio/gameplay.mp3';
+const CUTSCENE_VOLUME = 0.55;
+const GAMEPLAY_VOLUME = 0.30;
 let audioCtx = null;
 let masterGain = null;
 let cutsceneAudio = null;
@@ -1106,11 +1108,11 @@ function setupAudio() {
     cutsceneAudio = new Audio(CUTSCENE_AUDIO_SRC);
     cutsceneAudio.loop = true;
     cutsceneAudio.preload = 'auto';
-    cutsceneAudio.volume = soundMuted ? 0 : 0.55;
+    cutsceneAudio.volume = soundMuted ? 0 : CUTSCENE_VOLUME;
     gameplayAudio = new Audio(GAMEPLAY_AUDIO_SRC);
     gameplayAudio.loop = true;
     gameplayAudio.preload = 'auto';
-    gameplayAudio.volume = soundMuted ? 0 : 0.48;
+    gameplayAudio.volume = soundMuted ? 0 : GAMEPLAY_VOLUME;
     updateSoundButton();
 }
 
@@ -1134,8 +1136,8 @@ function toggleSound(e) {
     soundMuted = !soundMuted;
     localStorage.setItem(SOUND_KEY, soundMuted ? '1' : '0');
     masterGain.gain.setTargetAtTime(soundMuted ? 0 : 0.72, audioCtx.currentTime, 0.02);
-    cutsceneAudio.volume = soundMuted ? 0 : 0.55;
-    gameplayAudio.volume = soundMuted ? 0 : 0.48;
+    cutsceneAudio.volume = soundMuted ? 0 : CUTSCENE_VOLUME;
+    gameplayAudio.volume = soundMuted ? 0 : GAMEPLAY_VOLUME;
     if (soundMuted) pauseFileMusic();
     updateSoundButton();
     if (!soundMuted) {
