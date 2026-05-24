@@ -160,7 +160,14 @@
         .boss-hand-label { font-size: 0.65rem; color: #aaa; }
         .boss-hand-emoji { font-size: 2.4rem; }
 
-        .timer-track { height: 5px; background: rgba(255,255,255,0.15); overflow: hidden; width: 100%; }
+        .timer-track {
+            position: relative;
+            z-index: 18;
+            height: 5px;
+            background: rgba(255,255,255,0.15);
+            overflow: hidden;
+            width: 100%;
+        }
         .timer-fill  { height: 100%; border-radius: 3px; transition: width 40ms linear; }
 
         /* ── 結果メッセージ ── */
