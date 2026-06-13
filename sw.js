@@ -1,4 +1,4 @@
-const CACHE = 'settai-janken-v18';
+const CACHE = 'settai-janken-v19';
 const ASSETS = [
   './',
   './index.html',

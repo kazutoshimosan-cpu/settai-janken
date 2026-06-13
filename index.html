@@ -1265,9 +1265,7 @@ function nextOpeningPanel() {
     playSfx('tap');
     openingIndex += 1;
     if (openingIndex >= OPENING_PANELS.length) {
-        hide('opening-screen');
-        show('title-screen');
-        setMusic('title');
+        beginGameplay();
         return;
     }
     renderOpeningPanel();
@@ -1276,9 +1274,7 @@ function nextOpeningPanel() {
 function skipOpening(e) {
     e.stopPropagation();
     playSfx('tap');
-    hide('opening-screen');
-    show('title-screen');
-    setMusic('title');
+    beginGameplay();
 }
 
 function showEnding() {
@@ -1304,7 +1300,7 @@ function nextEndingPanel() {
     if (endingIndex >= ENDING_PANELS.length) {
         hide('ending-screen');
         show('title-screen');
-        setMusic('title');
+        setMusic('off');
         return;
     }
     renderEndingPanel();
@@ -1315,7 +1311,7 @@ function skipEnding(e) {
     playSfx('tap');
     hide('ending-screen');
     show('title-screen');
-    setMusic('title');
+    setMusic('off');
 }
 
 function setCat(state) {
@@ -1931,7 +1927,12 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
 function startGame() {
     unlockAudio();
     playSfx('start');
+    showOpening();
+}
+
+function beginGameplay() {
     setMusic('game');
+    hide('opening-screen');
     hide('title-screen');
     init(0);
 }
@@ -1946,7 +1947,8 @@ if (_params.get('ending') === '1') {
     setMusic('game');
     init(_startStage - 1);
 } else {
-    showOpening();
+    setMusic('off');
+    show('title-screen');
 }
 </script>
 </body>
