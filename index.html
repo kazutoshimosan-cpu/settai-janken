@@ -665,7 +665,7 @@ const IL = {win:'勝て！', lose:'負けろ！', draw:'あいこ！'};
 const IC = {win:'#e94560', lose:'#4ecca3', draw:'#ff9a3c'};
 
 const FLASH_MS   = 190;
-// Stage timer reference: ネズミ=2500, ウシ=3000→逆転, ウマ=300
+// Stage timer reference: all stages=5000
 const TICK_MS    = 40;
 const DOGEZA_NEED = 8;
 const DOGEZA_MS   = 2200;
@@ -712,7 +712,7 @@ const STAGES = [
         title: 'ステージ1: ネズミ先輩',
         hint: '⚡ 最後の指示だけが正解！途中で押したらアウト！',
         bg: 'backgrounds/background_construction.png',
-        label: '先輩の手 👇', activeMs: 1500, flashN: 4,
+        label: '先輩の手 👇', activeMs: 5000, flashN: 4,
         promotion: '新入社員 → 現場作業員 🔨',
         next: '次は【ウシ班長】の「スロー＆ドッカン」が待っている……',
         imgs: {
@@ -732,7 +732,7 @@ const STAGES = [
         title: 'ステージ2: ウシ班長',
         hint: '🐂 制限時間に油断するな。最後まで確認！',
         bg: 'backgrounds/background_construction.png',
-        label: '班長の手 👇', activeMs: 3000, flashN: 3,
+        label: '班長の手 👇', activeMs: 5000, flashN: 3,
         promotion: '現場作業員 → 班長見習い 🧰',
         next: '次は【トラ職長】の無言の圧が来る……',
         imgs: {
@@ -752,7 +752,7 @@ const STAGES = [
         title: 'ステージ3: トラ職長',
         hint: '🐯 無言の圧に負けるな。指示を読んで即対応！',
         bg: 'backgrounds/background_construction.png',
-        label: '職長の手 👇', activeMs: 1500, flashN: 3,
+        label: '職長の手 👇', activeMs: 5000, flashN: 3,
         promotion: '班長見習い → 現場リーダー補佐 📋',
         next: '次は【イノシシ現場監督】の猪突猛進が来る……',
         imgs: {
@@ -775,7 +775,7 @@ const STAGES = [
         title: 'ステージ4: イノシシ現場監督',
         hint: '🐗 突進に備えろ！ボタンが消えても諦めるな！',
         bg: 'backgrounds/background_construction.png',
-        label: '監督の手 👇', activeMs: 1500, flashN: 3,
+        label: '監督の手 👇', activeMs: 5000, flashN: 3,
         promotion: '現場リーダー補佐 → 現場完走者 🏗️',
         next: '次は【ウサギ受付嬢】の高速フェイクだ……',
         imgs: {
@@ -796,7 +796,7 @@ const STAGES = [
         title: 'ステージ5: ウサギ受付嬢',
         hint: '🐇 手が止まった瞬間が答えだ！動いてる間は押すな！',
         bg: 'backgrounds/background_office.png',
-        label: '受付の手 👇', activeMs: 1500, flashN: 5,
+        label: '受付の手 👇', activeMs: 5000, flashN: 5,
         promotion: '現場完走者 → 受付通過者 🎫',
         next: '次は【トリ朝礼担当】の朝礼パニックが来る……',
         imgs: {
@@ -816,7 +816,7 @@ const STAGES = [
         title: 'ステージ6: トリ朝礼担当',
         hint: '🐓 朝礼テンションに飲まれず、手元を見ろ！',
         bg: 'backgrounds/background_office.png',
-        label: '朝礼の手 👇', activeMs: 1300, flashN: 5,
+        label: '朝礼の手 👇', activeMs: 5000, flashN: 5,
         promotion: '受付通過者 → 朝礼参加認定 📣',
         next: '次は【ウマ営業マン】のボタンシャッフルが来る……',
         imgs: {
@@ -836,7 +836,7 @@ const STAGES = [
         title: 'ステージ7: ウマ営業マン',
         hint: '🐎 ボタンの位置が毎回変わる！よく見てから押せ！',
         bg: 'backgrounds/background_office.png',
-        label: '営業の手 👇', activeMs: 1500, flashN: 3,
+        label: '営業の手 👇', activeMs: 5000, flashN: 3,
         promotion: '朝礼参加認定 → 即レス社員 📱',
         next: '次は【ヘビ法務部員】のコンプラ地獄だ……',
         imgs: {
@@ -856,7 +856,7 @@ const STAGES = [
         title: 'ステージ8: ヘビ法務部員',
         hint: '🐍 長文の圧に惑わされず、指示だけ拾え！',
         bg: 'backgrounds/background_office.png',
-        label: '法務の手 👇', activeMs: 1700, flashN: 4,
+        label: '法務の手 👇', activeMs: 5000, flashN: 4,
         promotion: '即レス社員 → コンプラ通過者 📄',
         next: '次は【ヒツジ窓際部長】の催眠フェイントだ……',
         imgs: {
@@ -876,7 +876,7 @@ const STAGES = [
         title: 'ステージ9: ヒツジ窓際部長',
         hint: '🐑 眠そうでも油断禁物。暗転前の手を覚えておけ！',
         bg: 'backgrounds/background_meeting_room.png',
-        label: '古参の手 👇', activeMs: 2200, flashN: 4,
+        label: '古参の手 👇', activeMs: 5000, flashN: 4,
         promotion: 'コンプラ通過者 → 窓際見習い 💤',
         next: '次は【サル常務取締役】の猿真似コピーだ……',
         imgs: {
@@ -896,7 +896,7 @@ const STAGES = [
         title: 'ステージ10: サル常務取締役',
         hint: '🐒 前回出した手を真似してくる。自分の行動が武器だ！',
         bg: 'backgrounds/background_senior_executive_office重役室.png',
-        label: '常務の手 👇', activeMs: 1400, flashN: 4,
+        label: '常務の手 👇', activeMs: 5000, flashN: 4,
         promotion: '窓際見習い → 企画防衛担当 💡',
         next: '次は【イヌ専務取締役】の忠誠心テストだ……',
         imgs: {
@@ -916,7 +916,7 @@ const STAGES = [
         title: 'ステージ11: イヌ専務取締役',
         hint: '🐕 社長ゆかりのアイテム＝じゃんけんの手。対応表を覚えろ！',
         bg: 'backgrounds/background_senior_executive_office重役室.png',
-        label: '専務の手 👇', activeMs: 1600, flashN: 4,
+        label: '専務の手 👇', activeMs: 5000, flashN: 4,
         promotion: '企画防衛担当 → 社長室前通行証保持者 🦴',
         next: '最後は【タツ社長】。理不尽の本丸だ……',
         imgs: {
@@ -936,7 +936,7 @@ const STAGES = [
         title: 'ステージ12: タツ社長',
         hint: '🐉 社長はルールそのもの。最後の命令だけ信じろ！',
         bg: 'backgrounds/background_executive_office_employee_view社長室.png',
-        label: '社長の手 👇', activeMs: 1200, flashN: 5,
+        label: '社長の手 👇', activeMs: 5000, flashN: 5,
         promotion: '社長室前通行証保持者 → 干支入り！🏆',
         next: '全上司を接待しきった！',
         imgs: {
@@ -1165,8 +1165,8 @@ function playTone(freq, dur = 0.1, gain = 0.08, type = 'square') {
 function playSfx(kind) {
     unlockAudio();
     if (kind === 'ok') {
-        playTone(659, 0.08, 0.09, 'triangle');
-        setTimeout(() => playTone(880, 0.11, 0.08, 'triangle'), 70);
+        playTone(784, 0.16, 0.085, 'sine');
+        setTimeout(() => playTone(1046, 0.24, 0.075, 'sine'), 120);
     } else if (kind === 'fail') {
         playTone(180, 0.12, 0.09, 'sawtooth');
         setTimeout(() => playTone(120, 0.16, 0.08, 'sawtooth'), 90);
