@@ -580,7 +580,7 @@
     <div class="controls-area">
         <div class="dogeza-wrap" id="dogeza-wrap" style="visibility:hidden">
             <button class="dogeza-btn" id="dogeza-btn">
-                🙇 土下座！！ 連打せよ！ <span id="dogeza-cnt">(0/8)</span>
+                🙇 土下座！！ 連打せよ！ <span id="dogeza-cnt">(0/5)</span>
             </button>
         </div>
         <div class="controls">
@@ -664,11 +664,19 @@ const INSTRS = ['win','lose','draw'];
 const IL = {win:'勝て！', lose:'負けろ！', draw:'あいこ！'};
 const IC = {win:'#e94560', lose:'#4ecca3', draw:'#ff9a3c'};
 
-const FLASH_MS   = 190;
+const FLASH_MS   = 260;
 // Stage timer reference: all stages=5000
 const TICK_MS    = 40;
-const DOGEZA_NEED = 8;
-const DOGEZA_MS   = 2200;
+const DOGEZA_NEED = 5;
+const DOGEZA_MS   = 3500;
+const SNAKE_SCROLL_MS = 6000;
+const OX_FLIP_GRACE_MS = 1200;
+const SHEEP_DARK_DELAY_MS = 2600;
+const BOAR_RECOVER_MS = 700;
+const ROOSTER_DUMMY_COUNT = 5;
+const ROOSTER_DUMMY_HP = 1;
+const RABBIT_CYCLE_MS = 320;
+const RABBIT_PICK_MS = 3000;
 
 const MOOD_INIT    = 65;
 const MOOD_SUCCESS = +12;
@@ -1668,7 +1676,7 @@ function startSnakeScroll() {
     el.innerHTML = generateSnakeText(gs.finalInstr);
     el.style.animation = 'none';
     el.offsetHeight;
-    el.style.animation = 'snake-crawl 4s linear forwards';
+    el.style.animation = `snake-crawl ${SNAKE_SCROLL_MS / 1000}s linear forwards`;
     show('snake-scroll');
     setBubble('（第1条〜第847条を確認中…）', false, '#666', true);
     setBtns(false);
@@ -1679,7 +1687,7 @@ function startSnakeScroll() {
         setBubble(IL[gs.finalInstr], false, IC[gs.finalInstr]);
         startTimer();
         setBtns(true);
-    }, 4000);
+    }, SNAKE_SCROLL_MS);
 }
 
 // ── Ox ギミック ────────────────────────────────────────────────
@@ -1695,7 +1703,7 @@ function startOxPhase() {
         gs.correct    = getCorrect(gs.bossHand, gs.finalInstr);
         setBoss('angry');
         setBubble(IL[gs.finalInstr], false, '#e74c3c');
-    }, stage().activeMs - 150);
+    }, Math.max(0, stage().activeMs - OX_FLIP_GRACE_MS));
 }
 
 // ── Sheep ギミック ──────────────────────────────────────────────
@@ -1707,7 +1715,7 @@ function startSheepPhase() {
         if (gs.phase !== 'active') return;
         $('game').classList.add('sheep-dark');
         setBubble('……zzz……', false, '#555');
-    }, 700);
+    }, SHEEP_DARK_DELAY_MS);
 }
 
 // ── Dog ギミック ────────────────────────────────────────────────
@@ -1762,7 +1770,7 @@ function startBoarDestruction() {
             setBtns(true);
             setBubble(IL[gs.finalInstr], false, IC[gs.finalInstr]);
             startTimer();
-        }, 450);
+        }, BOAR_RECOVER_MS);
     }, 600);
 }
 
@@ -1779,13 +1787,13 @@ function startRoosterPhase() {
     setBoss('angry');
     setBubble('コケコッコー！ゴミ書類を全部叩き割れ！', false, '#e67e22');
 
-    const labels = [...DUMMY_LABELS].sort(() => Math.random() - 0.5).slice(0, 7);
+    const labels = [...DUMMY_LABELS].sort(() => Math.random() - 0.5).slice(0, ROOSTER_DUMMY_COUNT);
     gs.dummyCount = labels.length;
     labels.forEach(label => {
         const btn = document.createElement('div');
         btn.className = 'dummy-btn';
         btn.textContent = label;
-        btn.dataset.hp = '2';
+        btn.dataset.hp = String(ROOSTER_DUMMY_HP);
         btn.style.left = (5  + Math.random() * 72) + '%';
         btn.style.top  = (42 + Math.random() * 42) + '%';
         btn.addEventListener('click', () => tapDummy(btn));
@@ -1833,7 +1841,7 @@ function startRabbitPhase() {
         ci = (ci + 1) % 3;
         gs.bossHand = cycleHands[ci];
         setText('boss-hand', HI[gs.bossHand].e);
-    }, 180);
+    }, RABBIT_CYCLE_MS);
 
     gs.timerPct = 1.0;
     const steps = stage().activeMs / TICK_MS;
@@ -1861,7 +1869,7 @@ function rabbitStop() {
             setBtns(false);
             onFail('⏰ 反応できなかった！');
         }
-    }, 1500);
+    }, RABBIT_PICK_MS);
 }
 
 // ── Dragon ギミック ────────────────────────────────────────────
