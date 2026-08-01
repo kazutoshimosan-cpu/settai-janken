@@ -1,0 +1,200 @@
+{
+  "series": "十二支にまざる猫",
+  "episode": 1,
+  "title": "入社式",
+  "target": "instagram_reels_paper_theater",
+  "estimatedDurationSec": 30,
+  "assets": {
+    "backgrounds": {
+      "ceremony": "backgrounds/background_meeting_room.png",
+      "office": "backgrounds/background_office.png"
+    },
+    "characters": {
+      "nyantaSuitFront": "characters/cat/suit/cat_suit_front.png",
+      "nyantaSuitSideRight": "characters/cat/suit/turnaround/cat_suit_side_right_transparent.png",
+      "nyantaSuitSideLeft": "characters/cat/suit/turnaround/cat_suit_side_left_transparent.png",
+      "ratNormal": "characters/rat/rat_normal.png",
+      "ratHappy": "characters/rat/rat_happy.png"
+    }
+  },
+  "frames": [
+    {
+      "id": 1,
+      "background": "ceremony",
+      "caption": "十二支建設、入社式。",
+      "actors": [],
+      "durationSec": 0.8,
+      "sound": "pon"
+    },
+    {
+      "id": 2,
+      "background": "ceremony",
+      "speaker": "司会",
+      "dialogue": "新入社員、にゃん太さんです。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.5, "y": 0.82, "scale": 0.72 }
+      ],
+      "durationSec": 1.6
+    },
+    {
+      "id": 3,
+      "background": "ceremony",
+      "speaker": "にゃん太",
+      "dialogue": "本日より、十二支建設で働かせていただきます！",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.5, "y": 0.82, "scale": 0.76 }
+      ],
+      "durationSec": 2.2,
+      "sound": "small_applause"
+    },
+    {
+      "id": 4,
+      "background": "ceremony",
+      "speaker": "ネズミ先輩",
+      "dialogue": "猫……？",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.36, "y": 0.84, "scale": 0.66 },
+        { "asset": "ratNormal", "x": 0.68, "y": 0.84, "scale": 0.66 }
+      ],
+      "durationSec": 1.4,
+      "sound": "stop"
+    },
+    {
+      "id": 5,
+      "background": "ceremony",
+      "speaker": "にゃん太",
+      "dialogue": "はい、猫です。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.42, "y": 0.84, "scale": 0.7 },
+        { "asset": "ratNormal", "x": 0.7, "y": 0.84, "scale": 0.64 }
+      ],
+      "durationSec": 1.2
+    },
+    {
+      "id": 6,
+      "background": "ceremony",
+      "speaker": "ネズミ先輩",
+      "dialogue": "十二支ちゃうけどな。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.38, "y": 0.84, "scale": 0.68 },
+        { "asset": "ratNormal", "x": 0.7, "y": 0.84, "scale": 0.68 }
+      ],
+      "durationSec": 1.6,
+      "sound": "don"
+    },
+    {
+      "id": 7,
+      "background": "ceremony",
+      "speaker": "にゃん太",
+      "dialogue": "……",
+      "note": "無言。目が点の表情差分ができたら差し替える。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.5, "y": 0.84, "scale": 0.76 }
+      ],
+      "durationSec": 1.4,
+      "sound": "silent"
+    },
+    {
+      "id": 8,
+      "background": "ceremony",
+      "speaker": "にゃん太",
+      "dialogue": "精一杯、干支社会に貢献します。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.42, "y": 0.84, "scale": 0.7 },
+        { "asset": "ratNormal", "x": 0.7, "y": 0.84, "scale": 0.64 }
+      ],
+      "durationSec": 1.9
+    },
+    {
+      "id": 9,
+      "background": "ceremony",
+      "speaker": "ネズミ先輩",
+      "dialogue": "いや、そこまで重く考えんでええ。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.38, "y": 0.84, "scale": 0.68 },
+        { "asset": "ratHappy", "x": 0.7, "y": 0.84, "scale": 0.68 }
+      ],
+      "durationSec": 1.8
+    },
+    {
+      "id": 10,
+      "background": "ceremony",
+      "speaker": "ネズミ先輩",
+      "dialogue": "人手不足やから採用や。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.38, "y": 0.84, "scale": 0.68 },
+        { "asset": "ratNormal", "x": 0.7, "y": 0.84, "scale": 0.68 }
+      ],
+      "durationSec": 1.7,
+      "sound": "sun"
+    },
+    {
+      "id": 11,
+      "background": "ceremony",
+      "speaker": "にゃん太",
+      "dialogue": "……",
+      "note": "無言。2回目の間。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.5, "y": 0.84, "scale": 0.76 }
+      ],
+      "durationSec": 1.4,
+      "sound": "silent"
+    },
+    {
+      "id": 12,
+      "background": "ceremony",
+      "speaker": "にゃん太",
+      "dialogue": "干支じゃなくて、人員でした。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.5, "y": 0.84, "scale": 0.76 }
+      ],
+      "durationSec": 2.0,
+      "sound": "chin"
+    },
+    {
+      "id": 13,
+      "background": "office",
+      "speaker": "ネズミ先輩",
+      "dialogue": "ほな猫くん。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.38, "y": 0.84, "scale": 0.68 },
+        { "asset": "ratNormal", "x": 0.7, "y": 0.84, "scale": 0.68 }
+      ],
+      "durationSec": 1.1
+    },
+    {
+      "id": 14,
+      "background": "office",
+      "speaker": "にゃん太",
+      "dialogue": "はい！",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.42, "y": 0.84, "scale": 0.72 },
+        { "asset": "ratNormal", "x": 0.7, "y": 0.84, "scale": 0.64 }
+      ],
+      "durationSec": 0.9
+    },
+    {
+      "id": 15,
+      "background": "office",
+      "speaker": "ネズミ先輩",
+      "dialogue": "議事録、今日中で。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.38, "y": 0.84, "scale": 0.68 },
+        { "asset": "ratNormal", "x": 0.7, "y": 0.84, "scale": 0.68 }
+      ],
+      "durationSec": 1.6,
+      "sound": "dosa"
+    },
+    {
+      "id": 16,
+      "background": "office",
+      "speaker": "にゃん太",
+      "dialogue": "入社式、もう業務でした。",
+      "actors": [
+        { "asset": "nyantaSuitFront", "x": 0.5, "y": 0.84, "scale": 0.76 }
+      ],
+      "durationSec": 2.0,
+      "sound": "pocon"
+    }
+  ]
+}

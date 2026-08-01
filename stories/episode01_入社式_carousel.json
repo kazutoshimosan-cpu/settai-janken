@@ -1,0 +1,29 @@
+{
+  "_note": "yonkoma-maker.html のカルーセル形式（普通のインスタ投稿＝静止画スワイプ用）。動画版は episode01_入社式_paper_scene.json。ツールでは出力モード=カルーセル → 台本=『第1話 入社式』プリセットでも同じものを読める。点目=cat.suitDots（無言の間, 5・8枚目）, 汗=cat.suitDotsSweat（ラスト12枚目→実際は11枚目）。",
+  "title": "十二支にまざる猫",
+  "subtitle": "第1話「入社式」/ カルーセル版",
+  "panels": [
+    { "bg": "meeting", "actors": [{ "img": "cat.suit", "x": 0.5, "y": 0.96, "h": 0.62 }],
+      "bubbles": [{ "text": "干支に入れない猫が、\n入社しました。", "x": 0.15, "y": 0.05, "w": 0.70, "tail": "left" }] },
+    { "bg": "meeting", "actors": [{ "img": "cat.suit", "x": 0.5, "y": 0.96, "h": 0.64 }],
+      "bubbles": [{ "text": "本日より、十二支建設で\n働かせていただきます！", "x": 0.13, "y": 0.05, "w": 0.74, "tail": "left" }] },
+    { "bg": "meeting", "actors": [{ "img": "cat.suit", "x": 0.27, "y": 0.96, "h": 0.42 }, { "img": "rat.normal", "x": 0.73, "y": 0.96, "h": 0.42 }],
+      "bubbles": [{ "text": "猫……？", "x": 0.5, "y": 0.05, "w": 0.42, "tail": "right" }], "sfx": "ピタッ" },
+    { "bg": "meeting", "actors": [{ "img": "cat.suit", "x": 0.27, "y": 0.96, "h": 0.42 }, { "img": "rat.normal", "x": 0.73, "y": 0.96, "h": 0.42 }],
+      "bubbles": [{ "text": "十二支ちゃうけどな。", "x": 0.44, "y": 0.05, "w": 0.52, "tail": "right" }], "sfx": "ドン" },
+    { "bg": "meeting", "actors": [{ "img": "cat.suitDots", "x": 0.5, "y": 0.96, "h": 0.66 }], "bubbles": [] },
+    { "bg": "meeting", "actors": [{ "img": "cat.suit", "x": 0.27, "y": 0.96, "h": 0.42 }, { "img": "rat.normal", "x": 0.73, "y": 0.96, "h": 0.42 }],
+      "bubbles": [{ "text": "精一杯、干支社会に\n貢献します。", "x": 0.13, "y": 0.05, "w": 0.58, "tail": "left" }] },
+    { "bg": "meeting", "actors": [{ "img": "cat.suit", "x": 0.27, "y": 0.96, "h": 0.42 }, { "img": "rat.happy", "x": 0.73, "y": 0.96, "h": 0.42 }],
+      "bubbles": [{ "text": "いや……人手不足やから\n採用や。", "x": 0.42, "y": 0.05, "w": 0.54, "tail": "right" }], "sfx": "スン" },
+    { "bg": "meeting", "actors": [{ "img": "cat.suitDots", "x": 0.5, "y": 0.96, "h": 0.66 }], "bubbles": [] },
+    { "bg": "meeting", "actors": [{ "img": "cat.suit", "x": 0.5, "y": 0.96, "h": 0.64 }],
+      "bubbles": [{ "text": "干支じゃなくて、\n人員でした。", "x": 0.16, "y": 0.05, "w": 0.68, "tail": "left" }], "sfx": "チーン" },
+    { "bg": "office", "actors": [{ "img": "cat.suit", "x": 0.27, "y": 0.96, "h": 0.42 }, { "img": "rat.normal", "x": 0.73, "y": 0.96, "h": 0.42 }],
+      "bubbles": [{ "text": "議事録、今日中で。", "x": 0.44, "y": 0.05, "w": 0.52, "tail": "right" }], "sfx": "ドサッ" },
+    { "bg": "office", "actors": [{ "img": "cat.suitDotsSweat", "x": 0.5, "y": 0.96, "h": 0.64 }],
+      "bubbles": [{ "text": "入社式、もう業務でした。", "x": 0.13, "y": 0.05, "w": 0.74, "tail": "left" }], "sfx": "ポコン" },
+    { "bg": "title", "actors": [],
+      "bubbles": [{ "text": "十二支にまざる猫\n＠にゃん太", "x": 0.18, "y": 0.40, "w": 0.64, "tail": "left" }] }
+  ]
+}

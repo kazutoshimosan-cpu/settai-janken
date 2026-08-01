@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>十二支にまざる猫 4コマメーカー</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #241717;
+      --muted: #7c6f66;
+      --paper: #fffaf1;
+      --panel: #ffffff;
+      --line: #2f1b18;
+      --accent: #e85f3b;
+      --accent-2: #1f6f8b;
+      --soft: #f2e2c8;
+      --shadow: 0 18px 48px rgba(53, 31, 19, .16);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(135deg, rgba(232, 95, 59, .12), transparent 34%),
+        linear-gradient(315deg, rgba(31, 111, 139, .12), transparent 38%),
+        #f8efe0;
+    }
+
+    button,
+    select,
+    textarea,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: minmax(330px, 420px) minmax(0, 1fr);
+      gap: 24px;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .sidebar,
+    .preview-shell {
+      border: 3px solid var(--line);
+      background: rgba(255, 250, 241, .92);
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar {
+      border-radius: 18px;
+      padding: 20px;
+      align-self: start;
+      position: sticky;
+      top: 18px;
+      max-height: calc(100vh - 36px);
+      overflow: auto;
+    }
+
+    .preview-shell {
+      border-radius: 24px;
+      padding: 18px;
+      display: grid;
+      place-items: center;
+      min-height: calc(100vh - 48px);
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+      letter-spacing: 0;
+      line-height: 1.15;
+    }
+
+    .lead {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+      margin: 0 0 16px;
+    }
+
+    label {
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    select,
+    textarea,
+    input {
+      width: 100%;
+      border: 2px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink);
+      padding: 10px 12px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 360px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      line-height: 1.55;
+      white-space: pre;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 0 0 12px;
+    }
+
+    .button-row.single {
+      grid-template-columns: 1fr;
+    }
+
+    button {
+      border: 3px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink);
+      padding: 10px 12px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--line);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 0 var(--line);
+    }
+
+    button:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 var(--line);
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .secondary {
+      background: var(--accent-2);
+      color: #fff;
+    }
+
+    .note {
+      margin: 14px 0 0;
+      border-radius: 12px;
+      padding: 12px;
+      background: var(--soft);
+      color: #5f5047;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .error {
+      display: none;
+      margin: 10px 0 0;
+      padding: 10px;
+      border-radius: 10px;
+      background: #fff1f1;
+      border: 2px solid #bb3030;
+      color: #8b1f1f;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    canvas {
+      width: min(100%, 620px);
+      height: auto;
+      display: block;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 12px 32px rgba(34, 17, 13, .22);
+    }
+
+    .asset-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 960px) {
+      .app {
+        grid-template-columns: 1fr;
+        padding: 14px;
+      }
+
+      .sidebar {
+        position: static;
+        max-height: none;
+      }
+
+      .preview-shell {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="sidebar" aria-label="4コマ編集">
+      <h1>十二支にまざる猫<br>4コマメーカー</h1>
+      <p class="lead">主人公はにゃん太。既存PNGを紙人形として配置する試作版なので、台詞と立ち位置を変えてもキャラの見た目は変わりません。</p>
+
+      <div class="field">
+        <label for="preset">サンプル台本</label>
+        <select id="preset"></select>
+      </div>
+
+      <div class="field">
+        <label for="mode">出力モード</label>
+        <select id="mode">
+          <option value="strip">4コマ縦積み（X向け・1枚）</option>
+          <option value="carousel">カルーセル（インスタ向け・1枚ずつ）</option>
+        </select>
+      </div>
+
+      <div class="button-row">
+        <button id="loadPreset" type="button">台本を読む</button>
+        <button id="redraw" type="button">プレビュー更新</button>
+      </div>
+
+      <div class="button-row" id="slideNav" style="display:none">
+        <button id="prevSlide" type="button">◀ 前のコマ</button>
+        <button id="nextSlide" type="button">次のコマ ▶</button>
+      </div>
+
+      <div id="slideInfo" class="note" style="display:none"></div>
+
+      <div class="button-row single">
+        <button id="download" class="primary" type="button">PNGを書き出す</button>
+      </div>
+
+      <div class="button-row single" id="exportAllRow" style="display:none">
+        <button id="downloadAll" class="secondary" type="button">全スライドを連番で書き出す</button>
+      </div>
+
+      <div class="field">
+        <label for="sceneJson">台本JSON</label>
+        <textarea id="sceneJson" spellcheck="false"></textarea>
+      </div>
+
+      <div class="button-row">
+        <button id="applyJson" class="secondary" type="button">JSONを反映</button>
+        <button id="resetView" type="button">表示を戻す</button>
+      </div>
+
+      <div id="error" class="error"></div>
+
+      <div class="note">
+        <strong>使える主な画像キー</strong>
+        <div class="asset-list">
+          <span>cat.normal</span><span>cat.win</span>
+          <span>cat.lose</span><span>cat.dogeza</span>
+          <span>cat.sideRight</span><span>cat.front</span>
+          <span>rat.normal</span><span>rat.happy</span>
+          <span>rat.angry</span><span>rat.sideLeft</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="preview-shell" aria-label="4コマプレビュー">
+      <canvas id="comic" width="1080" height="1350"></canvas>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("comic");
+    const ctx = canvas.getContext("2d");
+    const presetSelect = document.getElementById("preset");
+    const sceneJson = document.getElementById("sceneJson");
+    const errorBox = document.getElementById("error");
+
+    const W = canvas.width;
+    const H = canvas.height;
+
+    const ASSETS = {
+      bg: {
+        construction: "backgrounds/background_construction.png",
+        office: "backgrounds/background_office.png",
+        meeting: "backgrounds/background_meeting_room.png",
+        ceremony: "backgrounds/background_ceremony.png",
+        title: "backgrounds/title_bg.png",
+        morning: "opening/backgrounds/opening_bg_construction_morning.png",
+        endingMorning: "ending/backgrounds/ending_bg_construction_morning.png"
+      },
+      char: {
+        cat: {
+          normal: "characters/cat/cat_normal.png",
+          win: "characters/cat/cat_win.png",
+          lose: "characters/cat/cat_lose.png",
+          dogeza: "characters/cat/cat_dogeza.png",
+          fired: "characters/cat/cat_fired.png",
+          front: "characters/cat/turnaround/cat_front_transparent.png",
+          sideLeft: "characters/cat/turnaround/cat_side_left_transparent.png",
+          sideRight: "characters/cat/turnaround/cat_side_right_transparent.png",
+          janken: "characters/cat/janken/cat_janken_side.png",
+          suit: "characters/cat/suit/cat_suit_front.png",
+          suitDots: "characters/cat/suit/expressions/cat_suit_dot_eyes.png",
+          suitDotsSweat: "characters/cat/suit/expressions/cat_suit_dot_eyes_sweat.png"
+        },
+        rat: {
+          normal: "characters/rat/rat_normal.png",
+          happy: "characters/rat/rat_happy.png",
+          angry: "characters/rat/rat_angry.png",
+          front: "characters/rat/turnaround/rat_front_transparent.png",
+          sideLeft: "characters/rat/turnaround/rat_side_left_transparent.png",
+          sideRight: "characters/rat/turnaround/rat_side_right_transparent.png"
+        },
+        ox: { front: "characters/ox/turnaround/ox_front_transparent.png" },
+        tiger: { front: "characters/tiger/turnaround/tiger_front_transparent.png" },
+        rabbit: { front: "characters/rabbit/turnaround/rabbit_front_transparent.png" },
+        dragon: { front: "characters/dragon/turnaround/dragon_front_transparent.png" },
+        monkey: { front: "characters/monkey/turnaround/monkey_front_transparent.png" }
+      }
+    };
+
+    const PRESETS = {
+      yesterday: {
+        title: "十二支にまざる猫",
+        subtitle: "第1話「昨日中」 / 主人公 にゃん太",
+        panels: [
+          {
+            bg: "construction",
+            caption: "朝礼後",
+            actors: [
+              { img: "cat.normal", x: .27, y: .94, h: .58 },
+              { img: "rat.normal", x: .73, y: .94, h: .62 }
+            ],
+            bubbles: [
+              { text: "にゃん太、これ今日中に頼むわ。", x: .58, y: .13, w: .36, tail: "right" }
+            ]
+          },
+          {
+            bg: "construction",
+            actors: [
+              { img: "cat.win", x: .28, y: .94, h: .58 },
+              { img: "rat.normal", x: .74, y: .94, h: .62 }
+            ],
+            bubbles: [
+              { text: "了解です！\n何時までですか？", x: .08, y: .10, w: .42, tail: "left" }
+            ]
+          },
+          {
+            bg: "construction",
+            sfx: "ドン",
+            actors: [
+              { img: "cat.lose", x: .27, y: .95, h: .56 },
+              { img: "rat.happy", x: .73, y: .94, h: .64 }
+            ],
+            bubbles: [
+              { text: "昨日中。", x: .62, y: .12, w: .26, tail: "right" }
+            ]
+          },
+          {
+            bg: "construction",
+            actors: [
+              { img: "cat.dogeza", x: .28, y: .96, h: .48 },
+              { img: "rat.normal", x: .75, y: .94, h: .62 }
+            ],
+            bubbles: [
+              { text: "時空を接待してきます。", x: .09, y: .11, w: .44, tail: "left" }
+            ],
+            caption: "現場では、時間も上司です。"
+          }
+        ]
+      },
+      checkFirst: {
+        title: "十二支にまざる猫",
+        subtitle: "第2話「確認します」 / 主人公 にゃん太",
+        panels: [
+          {
+            bg: "office",
+            actors: [
+              { img: "cat.front", x: .28, y: .94, h: .60 },
+              { img: "rat.angry", x: .73, y: .94, h: .62 }
+            ],
+            bubbles: [
+              { text: "まず確認してから進めます！", x: .08, y: .10, w: .46, tail: "left" }
+            ]
+          },
+          {
+            bg: "office",
+            actors: [
+              { img: "cat.lose", x: .27, y: .95, h: .58 },
+              { img: "rat.normal", x: .74, y: .94, h: .62 }
+            ],
+            bubbles: [
+              { text: "確認する前に、\nやって。", x: .58, y: .10, w: .34, tail: "right" }
+            ]
+          },
+          {
+            bg: "office",
+            sfx: "えっ",
+            actors: [
+              { img: "cat.lose", x: .28, y: .95, h: .60 },
+              { img: "rat.happy", x: .73, y: .94, h: .63 }
+            ],
+            bubbles: [
+              { text: "やってから確認。\nこれが段取りや。", x: .55, y: .11, w: .39, tail: "right" }
+            ]
+          },
+          {
+            bg: "office",
+            actors: [
+              { img: "cat.dogeza", x: .28, y: .96, h: .46 },
+              { img: "rat.normal", x: .74, y: .94, h: .62 }
+            ],
+            bubbles: [
+              { text: "順番とは。", x: .13, y: .13, w: .32, tail: "left" }
+            ],
+            caption: "接待力は、論理を越える。"
+          }
+        ]
+      },
+      presidentCase: {
+        title: "十二支にまざる猫",
+        subtitle: "第3話「社長案件」 / 主人公 にゃん太",
+        panels: [
+          {
+            bg: "meeting",
+            actors: [
+              { img: "cat.normal", x: .27, y: .94, h: .58 },
+              { img: "rat.normal", x: .74, y: .94, h: .62 }
+            ],
+            bubbles: [
+              { text: "にゃん太、社長案件や。", x: .58, y: .12, w: .34, tail: "right" }
+            ]
+          },
+          {
+            bg: "meeting",
+            actors: [
+              { img: "cat.win", x: .27, y: .94, h: .58 },
+              { img: "rat.happy", x: .74, y: .94, h: .63 }
+            ],
+            bubbles: [
+              { text: "つまり最優先ですね！", x: .10, y: .12, w: .39, tail: "left" }
+            ]
+          },
+          {
+            bg: "meeting",
+            actors: [
+              { img: "cat.lose", x: .27, y: .95, h: .58 },
+              { img: "rat.angry", x: .74, y: .94, h: .64 }
+            ],
+            bubbles: [
+              { text: "いや、まだ社長には\n見せてない。", x: .55, y: .10, w: .39, tail: "right" }
+            ]
+          },
+          {
+            bg: "meeting",
+            sfx: "予言",
+            actors: [
+              { img: "cat.dogeza", x: .28, y: .96, h: .46 },
+              { img: "rat.normal", x: .74, y: .94, h: .62 }
+            ],
+            bubbles: [
+              { text: "未来の社長案件ですね。", x: .09, y: .11, w: .43, tail: "left" }
+            ],
+            caption: "上司の予定は、だいたい天気予報。"
+          }
+        ]
+      },
+      narahaya: {
+        title: "十二支にまざる猫",
+        subtitle: "カルーセル版「なるはや」/ にゃん太",
+        panels: [
+          {
+            bg: "construction",
+            actors: [{ img: "rat.normal", x: .5, y: .96, h: .66 }],
+            bubbles: [{ text: "これ、なるはやで！", x: .26, y: .08, w: .52, tail: "right" }]
+          },
+          {
+            bg: "construction",
+            actors: [{ img: "cat.normal", x: .5, y: .96, h: .62 }],
+            bubbles: [{ text: "承知しました。\n期限はいつ頃…？", x: .20, y: .08, w: .60, tail: "left" }]
+          },
+          {
+            bg: "construction",
+            sfx: "ドン",
+            actors: [{ img: "rat.happy", x: .5, y: .96, h: .66 }],
+            bubbles: [{ text: "昨日中で。", x: .32, y: .08, w: .44, tail: "right" }]
+          },
+          {
+            bg: "construction",
+            actors: [{ img: "cat.lose", x: .5, y: .96, h: .60 }],
+            bubbles: []
+          },
+          {
+            bg: "construction",
+            actors: [{ img: "cat.dogeza", x: .5, y: .97, h: .52 }],
+            bubbles: [{ text: "時空を、調整します。", x: .18, y: .10, w: .64, tail: "left" }]
+          },
+          {
+            bg: "title",
+            actors: [],
+            bubbles: [{ text: "十二支にまざる猫\n＠にゃん太", x: .18, y: .38, w: .64, tail: "left" }]
+          }
+        ]
+      },
+      ep1_nyusha: {
+        title: "十二支にまざる猫",
+        subtitle: "第1話「入社式」/ カルーセル版",
+        panels: [
+          { bg: "ceremony", actors: [{ img: "cat.suit", x: .5, y: .96, h: .62 }],
+            bubbles: [{ text: "干支に入れない猫が、\n入社しました。", x: .15, y: .05, w: .70, tail: "left" }] },
+          { bg: "ceremony", actors: [{ img: "cat.suit", x: .5, y: .96, h: .64 }],
+            bubbles: [{ text: "本日より、十二支建設で\n働かせていただきます！", x: .13, y: .05, w: .74, tail: "left" }] },
+          { bg: "ceremony", actors: [{ img: "cat.suit", x: .27, y: .96, h: .42 }, { img: "rat.normal", x: .73, y: .96, h: .42 }],
+            bubbles: [{ text: "猫……？", x: .5, y: .05, w: .42, tail: "right" }], sfx: "ピタッ" },
+          { bg: "ceremony", actors: [{ img: "cat.suit", x: .27, y: .96, h: .42 }, { img: "rat.normal", x: .73, y: .96, h: .42 }],
+            bubbles: [{ text: "十二支ちゃうけどな。", x: .44, y: .05, w: .52, tail: "right" }], sfx: "ドン" },
+          { bg: "ceremony", actors: [{ img: "cat.suitDots", x: .5, y: .96, h: .66 }], bubbles: [] },
+          { bg: "ceremony", actors: [{ img: "cat.suit", x: .27, y: .96, h: .42 }, { img: "rat.normal", x: .73, y: .96, h: .42 }],
+            bubbles: [{ text: "精一杯、干支社会に\n貢献します。", x: .13, y: .05, w: .58, tail: "left" }] },
+          { bg: "ceremony", actors: [{ img: "cat.suit", x: .27, y: .96, h: .42 }, { img: "rat.happy", x: .73, y: .96, h: .42 }],
+            bubbles: [{ text: "いや……人手不足やから\n採用や。", x: .42, y: .05, w: .54, tail: "right" }], sfx: "スン" },
+          { bg: "ceremony", actors: [{ img: "cat.suitDots", x: .5, y: .96, h: .66 }], bubbles: [] },
+          { bg: "ceremony", actors: [{ img: "cat.suit", x: .5, y: .96, h: .64 }],
+            bubbles: [{ text: "干支じゃなくて、\n人員でした。", x: .16, y: .05, w: .68, tail: "left" }], sfx: "チーン" },
+          { bg: "office", actors: [{ img: "cat.suit", x: .27, y: .96, h: .42 }, { img: "rat.normal", x: .73, y: .96, h: .42 }],
+            bubbles: [{ text: "議事録、今日中で。", x: .44, y: .05, w: .52, tail: "right" }], sfx: "ドサッ" },
+          { bg: "office", actors: [{ img: "cat.suitDotsSweat", x: .5, y: .96, h: .64 }],
+            bubbles: [{ text: "入社式、もう業務でした。", x: .13, y: .05, w: .74, tail: "left" }], sfx: "ポコン" },
+          { bg: "title", actors: [],
+            bubbles: [{ text: "十二支にまざる猫\n＠にゃん太", x: .18, y: .40, w: .64, tail: "left" }] }
+        ]
+      }
+    };
+
+    const imageCache = new Map();
+    let currentScene = structuredClone(PRESETS.yesterday);
+    let currentMode = "strip";   // "strip" = 4コマ縦積み / "carousel" = 1枚ずつ
+    let currentSlide = 0;
+
+    function clone(value) {
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    const MAX_PANELS = 20;  // Instagramカルーセル上限に合わせる
+
+    function normalizeScene(scene) {
+      const next = clone(scene);
+      next.title = next.title || "無題";
+      next.subtitle = next.subtitle || "";
+      next.panels = Array.isArray(next.panels) ? next.panels.slice(0, MAX_PANELS) : [];
+      if (next.panels.length === 0) {
+        next.panels.push({ bg: "construction", actors: [], bubbles: [] });
+      }
+      next.panels = next.panels.map((panel) => ({
+        bg: panel.bg || "construction",
+        caption: panel.caption || "",
+        sfx: panel.sfx || "",
+        actors: Array.isArray(panel.actors) ? panel.actors : [],
+        bubbles: Array.isArray(panel.bubbles) ? panel.bubbles : []
+      }));
+      return next;
+    }
+
+    function getAssetPath(key, type = "char") {
+      if (type === "bg") return ASSETS.bg[key] || ASSETS.bg.construction;
+      const [group, name] = key.split(".");
+      return ASSETS.char[group] && ASSETS.char[group][name] ? ASSETS.char[group][name] : ASSETS.char.cat.normal;
+    }
+
+    function loadImage(src) {
+      if (imageCache.has(src)) return imageCache.get(src);
+      const promise = new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error(src + " を読み込めませんでした"));
+        img.src = src;
+      });
+      imageCache.set(src, promise);
+      return promise;
+    }
+
+    async function preloadScene(scene) {
+      const paths = [];
+      for (const panel of scene.panels) {
+        paths.push(getAssetPath(panel.bg, "bg"));
+        for (const actor of panel.actors) paths.push(getAssetPath(actor.img));
+      }
+      await Promise.all([...new Set(paths)].map(loadImage));
+    }
+
+    function roundRect(x, y, w, h, r) {
+      const radius = Math.min(r, w / 2, h / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + w, y, x + w, y + h, radius);
+      ctx.arcTo(x + w, y + h, x, y + h, radius);
+      ctx.arcTo(x, y + h, x, y, radius);
+      ctx.arcTo(x, y, x + w, y, radius);
+      ctx.closePath();
+    }
+
+    function drawImageCover(img, x, y, w, h) {
+      const scale = Math.max(w / img.width, h / img.height);
+      const sw = w / scale;
+      const sh = h / scale;
+      const sx = (img.width - sw) / 2;
+      const sy = (img.height - sh) / 2;
+      ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+    }
+
+    function wrapText(text, maxWidth, font) {
+      ctx.font = font;
+      const lines = [];
+      for (const rawLine of String(text).split("\n")) {
+        let line = "";
+        for (const char of rawLine) {
+          const next = line + char;
+          if (ctx.measureText(next).width > maxWidth && line) {
+            lines.push(line);
+            line = char;
+          } else {
+            line = next;
+          }
+        }
+        lines.push(line);
+      }
+      return lines;
+    }
+
+    function drawBubble(text, panel, bubble, scale = 1) {
+      const px = panel.x + panel.w * (bubble.x ?? .1);
+      const py = panel.y + panel.h * (bubble.y ?? .1);
+      const bw = panel.w * (bubble.w ?? .36);
+      const fontSize = (bubble.size || 34) * scale;
+      const font = `900 ${fontSize}px system-ui, -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif`;
+      const lines = wrapText(text, bw - 42, font);
+      const lineHeight = fontSize * 1.34;
+      const bh = Math.max(80, lines.length * lineHeight + 34);
+
+      ctx.save();
+      ctx.fillStyle = "#fff";
+      ctx.strokeStyle = "#271615";
+      ctx.lineWidth = 5;
+      roundRect(px, py, bw, bh, 24);
+      ctx.fill();
+      ctx.stroke();
+
+      const tailSide = bubble.tail || "left";
+      ctx.beginPath();
+      if (tailSide === "right") {
+        ctx.moveTo(px + bw - 56, py + bh - 2);
+        ctx.lineTo(px + bw - 18, py + bh + 38);
+        ctx.lineTo(px + bw - 100, py + bh - 8);
+      } else {
+        ctx.moveTo(px + 56, py + bh - 2);
+        ctx.lineTo(px + 18, py + bh + 38);
+        ctx.lineTo(px + 100, py + bh - 8);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.font = font;
+      ctx.fillStyle = "#261717";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      lines.forEach((line, index) => {
+        ctx.fillText(line, px + 22, py + 18 + index * lineHeight);
+      });
+      ctx.restore();
+    }
+
+    async function drawActor(actor, panel) {
+      const img = await loadImage(getAssetPath(actor.img));
+      const targetH = panel.h * (actor.h ?? .58);
+      const targetW = targetH * (img.width / img.height);
+      const cx = panel.x + panel.w * (actor.x ?? .5);
+      const bottom = panel.y + panel.h * (actor.y ?? .94);
+      const dx = cx - targetW / 2;
+      const dy = bottom - targetH;
+
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, .28)";
+      ctx.shadowBlur = 14;
+      ctx.shadowOffsetY = 10;
+      ctx.beginPath();
+      ctx.ellipse(cx, bottom + 5, targetW * .28, 13, 0, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(53, 38, 31, .20)";
+      ctx.fill();
+      ctx.shadowColor = "transparent";
+
+      if (actor.flip) {
+        ctx.translate(dx + targetW, dy);
+        ctx.scale(-1, 1);
+        ctx.drawImage(img, 0, 0, targetW, targetH);
+      } else {
+        ctx.drawImage(img, dx, dy, targetW, targetH);
+      }
+      ctx.restore();
+    }
+
+    function drawCaption(text, panel, scale = 1) {
+      if (!text) return;
+      const pad = 18 * scale;
+      const fontSize = 28 * scale;
+      const boxH = 38 * scale;
+      ctx.save();
+      ctx.font = `900 ${fontSize}px system-ui, -apple-system, "Hiragino Sans", "Yu Gothic", sans-serif`;
+      const width = Math.min(panel.w - 36 * scale, ctx.measureText(text).width + pad * 2);
+      const x = panel.x + panel.w - width - 18 * scale;
+      const y = panel.y + panel.h - 54 * scale;
+      roundRect(x, y, width, boxH, 12 * scale);
+      ctx.fillStyle = "rgba(255, 255, 255, .88)";
+      ctx.fill();
+      ctx.strokeStyle = "#2a1715";
+      ctx.lineWidth = 3 * scale;
+      ctx.stroke();
+      ctx.fillStyle = "#2a1715";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, x + width / 2, y + boxH / 2);
+      ctx.restore();
+    }
+
+    function drawSfx(text, panel, scale = 1) {
+      if (!text) return;
+      ctx.save();
+      ctx.translate(panel.x + panel.w * .15, panel.y + panel.h * .33);
+      ctx.rotate(-.12);
+      ctx.font = `900 ${70 * scale}px system-ui, -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif`;
+      ctx.lineWidth = 12 * scale;
+      ctx.strokeStyle = "#fff";
+      ctx.fillStyle = "#df3d29";
+      ctx.strokeText(text, 0, 0);
+      ctx.fillText(text, 0, 0);
+      ctx.restore();
+    }
+
+    async function drawPanel(panelData, index, rect, opts = {}) {
+      const rounded = opts.rounded ?? 22;
+      const showIndex = opts.showIndex ?? true;
+      const headerStrip = opts.headerStrip ?? true;
+      const border = opts.border ?? 8;
+      const textScale = opts.textScale ?? 1;
+
+      ctx.save();
+      roundRect(rect.x, rect.y, rect.w, rect.h, rounded);
+      ctx.clip();
+
+      const bg = await loadImage(getAssetPath(panelData.bg, "bg"));
+      drawImageCover(bg, rect.x, rect.y, rect.w, rect.h);
+      ctx.fillStyle = "rgba(255, 244, 225, .10)";
+      ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+
+      if (headerStrip) {
+        ctx.fillStyle = "rgba(255, 255, 255, .50)";
+        ctx.fillRect(rect.x, rect.y, rect.w, 46);
+      }
+      if (showIndex) {
+        ctx.font = "900 28px system-ui, -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif";
+        ctx.fillStyle = "#2b1a18";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`${index + 1}`, rect.x + 20, rect.y + 25);
+      }
+
+      const actors = [...panelData.actors].sort((a, b) => (a.y ?? .94) - (b.y ?? .94));
+      for (const actor of actors) await drawActor(actor, rect);
+
+      drawSfx(panelData.sfx, rect, textScale);
+      for (const bubble of panelData.bubbles) drawBubble(bubble.text, rect, bubble, textScale);
+      drawCaption(panelData.caption, rect, textScale);
+      ctx.restore();
+
+      if (border > 0) {
+        ctx.save();
+        roundRect(rect.x, rect.y, rect.w, rect.h, rounded);
+        ctx.strokeStyle = "#2b1715";
+        ctx.lineWidth = border;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    async function drawScene(scene) {
+      currentScene = normalizeScene(scene);
+      hideError();
+      await preloadScene(currentScene);
+
+      if (currentMode === "carousel") {
+        currentSlide = Math.max(0, Math.min(currentSlide, currentScene.panels.length - 1));
+        await renderSlide(currentScene, currentSlide);
+      } else {
+        await renderStrip(currentScene);
+      }
+      updateSlideInfo();
+    }
+
+    async function renderStrip(scene) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = "#fff6e8";
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.save();
+      ctx.fillStyle = "#2b1715";
+      ctx.font = "900 54px system-ui, -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillText(scene.title, 48, 34);
+      ctx.font = "800 24px system-ui, -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif";
+      ctx.fillStyle = "#8c5b43";
+      ctx.fillText(scene.subtitle, 52, 96);
+      ctx.restore();
+
+      const n = Math.min(Math.max(scene.panels.length, 1), 6);
+      const margin = 44;
+      const top = 130;
+      const gap = 18;
+      const panelW = W - margin * 2;
+      const panelH = (H - top - margin - gap * (n - 1)) / n;
+      for (let i = 0; i < n; i += 1) {
+        await drawPanel(scene.panels[i], i, {
+          x: margin,
+          y: top + i * (panelH + gap),
+          w: panelW,
+          h: panelH
+        });
+      }
+    }
+
+    async function renderSlide(scene, index) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = "#fff6e8";
+      ctx.fillRect(0, 0, W, H);
+      const panel = scene.panels[index] || scene.panels[0];
+      await drawPanel(panel, index, { x: 0, y: 0, w: W, h: H }, {
+        rounded: 0,
+        showIndex: false,
+        headerStrip: false,
+        border: 0,
+        textScale: 1.5
+      });
+    }
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+    }
+
+    function hideError() {
+      errorBox.textContent = "";
+      errorBox.style.display = "none";
+    }
+
+    function updateJson(scene) {
+      sceneJson.value = JSON.stringify(scene, null, 2);
+    }
+
+    function setupPresets() {
+      const labels = {
+        yesterday: "昨日中",
+        checkFirst: "確認します",
+        presidentCase: "社長案件",
+        narahaya: "なるはや（カルーセル6枚）",
+        ep1_nyusha: "第1話 入社式（カルーセル12枚）"
+      };
+      Object.keys(PRESETS).forEach((key) => {
+        const option = document.createElement("option");
+        option.value = key;
+        option.textContent = labels[key] || key;
+        presetSelect.appendChild(option);
+      });
+    }
+
+    async function loadPreset() {
+      const selected = presetSelect.value;
+      currentScene = structuredClone(PRESETS[selected]);
+      updateJson(currentScene);
+      await drawScene(currentScene);
+    }
+
+    async function applyJson() {
+      try {
+        const parsed = JSON.parse(sceneJson.value);
+        currentScene = normalizeScene(parsed);
+        updateJson(currentScene);
+        await drawScene(currentScene);
+      } catch (error) {
+        showError("JSONの形が崩れています: " + error.message);
+      }
+    }
+
+    function safeTitle() {
+      return (currentScene.title || "yonkoma").replace(/[\\/:*?"<>|\s]/g, "");
+    }
+
+    function triggerDownload(name) {
+      const link = document.createElement("a");
+      link.download = name;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    function downloadPng() {
+      const suffix = currentMode === "carousel"
+        ? `-slide-${String(currentSlide + 1).padStart(2, "0")}`
+        : "-4koma";
+      triggerDownload(`settai-janken-${safeTitle()}${suffix}.png`);
+    }
+
+    async function downloadAllSlides() {
+      const title = safeTitle();
+      const total = currentScene.panels.length;
+      for (let i = 0; i < total; i += 1) {
+        await renderSlide(currentScene, i);
+        triggerDownload(`settai-janken-${title}-slide-${String(i + 1).padStart(2, "0")}.png`);
+        await new Promise((resolve) => setTimeout(resolve, 350));
+      }
+      await drawScene(currentScene);
+    }
+
+    function applyModeUI() {
+      const carousel = currentMode === "carousel";
+      document.getElementById("slideNav").style.display = carousel ? "grid" : "none";
+      document.getElementById("exportAllRow").style.display = carousel ? "grid" : "none";
+      document.getElementById("slideInfo").style.display = carousel ? "block" : "none";
+    }
+
+    function updateSlideInfo() {
+      if (currentMode !== "carousel") return;
+      const total = currentScene.panels.length;
+      document.getElementById("slideInfo").textContent =
+        `スライド ${currentSlide + 1} / ${total}　— スワイプ＝間。台詞ゼロの無言コマもここで1枚`;
+    }
+
+    const modeSelect = document.getElementById("mode");
+
+    document.getElementById("loadPreset").addEventListener("click", loadPreset);
+    document.getElementById("redraw").addEventListener("click", () => drawScene(currentScene).catch((error) => showError(error.message)));
+    document.getElementById("download").addEventListener("click", downloadPng);
+    document.getElementById("downloadAll").addEventListener("click", () => downloadAllSlides().catch((error) => showError(error.message)));
+    document.getElementById("applyJson").addEventListener("click", () => applyJson().catch((error) => showError(error.message)));
+    document.getElementById("resetView").addEventListener("click", () => {
+      updateJson(currentScene);
+      drawScene(currentScene).catch((error) => showError(error.message));
+    });
+
+    modeSelect.addEventListener("change", () => {
+      currentMode = modeSelect.value;
+      currentSlide = 0;
+      applyModeUI();
+      drawScene(currentScene).catch((error) => showError(error.message));
+    });
+    document.getElementById("prevSlide").addEventListener("click", () => {
+      currentSlide = Math.max(0, currentSlide - 1);
+      drawScene(currentScene).catch((error) => showError(error.message));
+    });
+    document.getElementById("nextSlide").addEventListener("click", () => {
+      currentSlide = Math.min(currentScene.panels.length - 1, currentSlide + 1);
+      drawScene(currentScene).catch((error) => showError(error.message));
+    });
+
+    setupPresets();
+    applyModeUI();
+    updateJson(currentScene);
+    drawScene(currentScene).catch((error) => showError(error.message));
+  </script>
+</body>
+</html>
