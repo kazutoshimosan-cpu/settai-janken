@@ -10,3 +10,6 @@ asset-prompts.md
 backgrounds/title_confrontation*.png
 backgrounds/background_executive_office.png
 backgrounds/background.png
+
+# 配布用の固め物は再生成できるので追跡しない（カバー画像・スクショ・掲載文は追跡する）
+releases/**/*.zip

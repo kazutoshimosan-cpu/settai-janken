@@ -34,7 +34,7 @@
             max-width: 420px;
             height: 100vh;
             max-height: 860px;
-            background: url('backgrounds/background_construction.png') center center / cover no-repeat;
+            background: url('backgrounds/background_construction.webp') center center / cover no-repeat;
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -336,7 +336,7 @@
         /* Title screen */
         #title-screen {
             position: fixed; inset: 0; z-index: 200;
-            background: #0d0d1a url('backgrounds/title_bg.png') center 30% / cover no-repeat;
+            background: #0d0d1a url('backgrounds/title_bg.webp') center 30% / cover no-repeat;
             display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
             padding-bottom: 13%;
         }
@@ -552,7 +552,7 @@
     </div>
 
     <!-- ボスキャラ（背景の地面に立つ — game直下absolute） -->
-    <img id="boss-img" class="boss-img" src="characters/rat/rat_normal_large.png" alt="ネズミ先輩">
+    <img id="boss-img" class="boss-img" src="characters/rat/rat_normal_large.webp" alt="ネズミ先輩">
 
     <!-- ボスエリア（吹き出し＋ヒント＋手UIのみ） -->
     <div class="boss-area">
@@ -576,7 +576,7 @@
     <div class="result-msg" id="result-msg"></div>
 
     <!-- ネコ小ポートレート -->
-    <img id="cat-img" class="cat-portrait" src="characters/cat/cat_normal.png" alt="ネコ">
+    <img id="cat-img" class="cat-portrait" src="characters/cat/cat_normal.webp" alt="ネコ">
 
     <!-- コントロール -->
     <div class="timer-track"><div class="timer-fill" id="timer-fill" style="width:0%"></div></div>
@@ -615,7 +615,7 @@
 <!-- オープニング紙芝居 -->
 <div id="opening-screen" class="hidden">
     <div class="opening-frame" onclick="nextOpeningPanel()">
-        <img id="opening-img" class="opening-img" src="opening/panels/opening_01_cat_arrives.png" alt="オープニング">
+        <img id="opening-img" class="opening-img" src="opening/panels/opening_01_cat_arrives.webp" alt="オープニング">
         <div class="opening-ui">
             <div class="opening-count" id="opening-count">1/10</div>
             <button class="opening-skip" type="button" onclick="skipOpening(event)">スキップ</button>
@@ -630,7 +630,7 @@
 <!-- エンディング紙芝居 -->
 <div id="ending-screen" class="hidden">
     <div class="opening-frame" onclick="nextEndingPanel()">
-        <img id="ending-img" class="opening-img" src="ending/panels/ending_01_dragon_grants.png" alt="エンディング">
+        <img id="ending-img" class="opening-img" src="ending/panels/ending_01_dragon_grants.webp" alt="エンディング">
         <div class="opening-ui">
             <div class="opening-count" id="ending-count">1/5</div>
             <button class="opening-skip" type="button" onclick="skipEnding(event)">タイトルへ</button>
@@ -723,14 +723,14 @@ const STAGES = [
         key: 'rat', no: 1, name: 'ネズミ先輩', role: '現場作業員（1年先輩）',
         title: 'ステージ1: ネズミ先輩',
         hint: '⚡ 最後の指示だけが正解！途中で押したらアウト！',
-        bg: 'backgrounds/background_construction.png',
+        bg: 'backgrounds/background_construction.webp',
         label: '先輩の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 4,
         promotion: '新入社員 → 現場作業員 🔨',
         next: '次は【ウシ班長】の「スロー＆ドッカン」が待っている……',
         imgs: {
-            normal: 'characters/rat/rat_normal_large.png',
-            happy:  'characters/rat/rat_happy_large.png',
-            angry:  'characters/rat/rat_angry_large.png',
+            normal: 'characters/rat/rat_normal_large.webp',
+            happy:  'characters/rat/rat_happy_large.webp',
+            angry:  'characters/rat/rat_angry_large.webp',
         },
         dialogue: {
             intro: 'よっしゃ！先輩が手取り足取り教えてやるよ！ほんっとうにありがたいと思えよ？',
@@ -743,14 +743,14 @@ const STAGES = [
         key: 'ox', no: 2, name: 'ウシ班長', role: '班長',
         title: 'ステージ2: ウシ班長',
         hint: '🐂 制限時間に油断するな。最後まで確認！',
-        bg: 'backgrounds/background_construction.png',
+        bg: 'backgrounds/background_construction.webp',
         label: '班長の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 3,
         promotion: '現場作業員 → 班長見習い 🧰',
         next: '次は【トラ職長】の無言の圧が来る……',
         imgs: {
-            normal: 'characters/ox/ox_normal.png',
-            happy:  'characters/ox/ox_happy.png',
-            angry:  'characters/ox/ox_angry.png',
+            normal: 'characters/ox/ox_normal.webp',
+            happy:  'characters/ox/ox_happy.webp',
+            angry:  'characters/ox/ox_angry.webp',
         },
         dialogue: {
             intro: '……ゆっくり……来い。……逃げるなよ',
@@ -763,17 +763,17 @@ const STAGES = [
         key: 'tiger', no: 3, name: 'トラ職長', role: '職長',
         title: 'ステージ3: トラ職長',
         hint: '🐯 無言の圧に負けるな。指示を読んで即対応！',
-        bg: 'backgrounds/background_construction.png',
+        bg: 'backgrounds/background_construction.webp',
         label: '職長の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 3,
         promotion: '班長見習い → 現場リーダー補佐 📋',
         next: '次は【イノシシ現場監督】の猪突猛進が来る……',
         imgs: {
-            normal:      'characters/tiger/tiger_normal.png',
-            happy:       'characters/tiger/tiger_happy.png',
-            angry:       'characters/tiger/tiger_angry.png',
-            expr_katte:  'characters/tiger/tiger_expr_katte.png',
-            expr_makero: 'characters/tiger/tiger_expr_makero.png',
-            expr_aiko:   'characters/tiger/tiger_expr_aiko.png',
+            normal:      'characters/tiger/tiger_normal.webp',
+            happy:       'characters/tiger/tiger_happy.webp',
+            angry:       'characters/tiger/tiger_angry.webp',
+            expr_katte:  'characters/tiger/tiger_expr_katte.webp',
+            expr_makero: 'characters/tiger/tiger_expr_makero.webp',
+            expr_aiko:   'characters/tiger/tiger_expr_aiko.webp',
         },
         dialogue: {
             intro: '…',
@@ -786,15 +786,15 @@ const STAGES = [
         key: 'boar', no: 4, name: 'イノシシ現場監督', role: '現場監督',
         title: 'ステージ4: イノシシ現場監督',
         hint: '🐗 突進に備えろ！ボタンが消えても諦めるな！',
-        bg: 'backgrounds/background_construction.png',
+        bg: 'backgrounds/background_construction.webp',
         label: '監督の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 3,
         promotion: '現場リーダー補佐 → 現場完走者 🏗️',
         next: '次は【ウサギ受付嬢】の高速フェイクだ……',
         imgs: {
-            normal:  'characters/boar/boar_normal.png',
-            happy:   'characters/boar/boar_happy.png',
-            angry:   'characters/boar/boar_angry.png',
-            charge:  'characters/boar/boar_charge.png',
+            normal:  'characters/boar/boar_normal.webp',
+            happy:   'characters/boar/boar_happy.webp',
+            angry:   'characters/boar/boar_angry.webp',
+            charge:  'characters/boar/boar_charge.webp',
         },
         dialogue: {
             intro: 'うおおおお！！俺の現場に踏み込んだ度胸だけは認めてやるわああ！！',
@@ -807,14 +807,14 @@ const STAGES = [
         key: 'rabbit', no: 5, name: 'ウサギ受付嬢', role: '総務部受付',
         title: 'ステージ5: ウサギ受付嬢',
         hint: '🐇 手が止まった瞬間が答えだ！動いてる間は押すな！',
-        bg: 'backgrounds/background_office.png',
+        bg: 'backgrounds/background_office.webp',
         label: '受付の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 5,
         promotion: '現場完走者 → 受付通過者 🎫',
         next: '次は【トリ朝礼担当】の朝礼パニックが来る……',
         imgs: {
-            normal: 'characters/rabbit/rabbit_normal.png',
-            happy:  'characters/rabbit/rabbit_happy.png',
-            angry:  'characters/rabbit/rabbit_angry.png',
+            normal: 'characters/rabbit/rabbit_normal.webp',
+            happy:  'characters/rabbit/rabbit_happy.webp',
+            angry:  'characters/rabbit/rabbit_angry.webp',
         },
         dialogue: {
             intro: 'あ、ネコさん♪ 上の方への御用でしょうか？大変申し訳ないのですが、事前のアポが必要でして☆',
@@ -827,14 +827,14 @@ const STAGES = [
         key: 'rooster', no: 6, name: 'トリ朝礼担当', role: '総務部（朝礼担当）',
         title: 'ステージ6: トリ朝礼担当',
         hint: '🐓 朝礼テンションに飲まれず、手元を見ろ！',
-        bg: 'backgrounds/background_office.png',
+        bg: 'backgrounds/background_office.webp',
         label: '朝礼の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 5,
         promotion: '受付通過者 → 朝礼参加認定 📣',
         next: '次は【ウマ営業マン】のボタンシャッフルが来る……',
         imgs: {
-            normal: 'characters/rooster/rooster_normal.png',
-            happy:  'characters/rooster/rooster_happy.png',
-            angry:  'characters/rooster/rooster_angry.png',
+            normal: 'characters/rooster/rooster_normal.webp',
+            happy:  'characters/rooster/rooster_happy.webp',
+            angry:  'characters/rooster/rooster_angry.webp',
         },
         dialogue: {
             intro: '起立！気をつけ！礼！0.01秒でも遅れたら始末書だ！！',
@@ -847,14 +847,14 @@ const STAGES = [
         key: 'horse', no: 7, name: 'ウマ営業マン', role: '営業部',
         title: 'ステージ7: ウマ営業マン',
         hint: '🐎 ボタンの位置が毎回変わる！よく見てから押せ！',
-        bg: 'backgrounds/background_office.png',
+        bg: 'backgrounds/background_office.webp',
         label: '営業の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 3,
         promotion: '朝礼参加認定 → 即レス社員 📱',
         next: '次は【ヘビ法務部員】のコンプラ地獄だ……',
         imgs: {
-            normal: 'characters/horse/horse_normal.png',
-            happy:  'characters/horse/horse_happy.png',
-            angry:  'characters/horse/horse_angry.png',
+            normal: 'characters/horse/horse_normal.webp',
+            happy:  'characters/horse/horse_happy.webp',
+            angry:  'characters/horse/horse_angry.webp',
         },
         dialogue: {
             intro: 'じゃ早速！話は移動しながら！時間がないんだよ！！',
@@ -867,14 +867,14 @@ const STAGES = [
         key: 'snake', no: 8, name: 'ヘビ法務部員', role: '法務部',
         title: 'ステージ8: ヘビ法務部員',
         hint: '🐍 長文の圧に惑わされず、指示だけ拾え！',
-        bg: 'backgrounds/background_office.png',
+        bg: 'backgrounds/background_office.webp',
         label: '法務の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 4,
         promotion: '即レス社員 → コンプラ通過者 📄',
         next: '次は【ヒツジ窓際部長】の催眠フェイントだ……',
         imgs: {
-            normal: 'characters/snake/snake_normal.png',
-            happy:  'characters/snake/snake_happy.png',
-            angry:  'characters/snake/snake_angry.png',
+            normal: 'characters/snake/snake_normal.webp',
+            happy:  'characters/snake/snake_happy.webp',
+            angry:  'characters/snake/snake_angry.webp',
         },
         dialogue: {
             intro: 'じゃんけんを行う前に、第1条から第847条まで目を通しておいてください。口頭での質問は受け付けておりません',
@@ -887,14 +887,14 @@ const STAGES = [
         key: 'sheep', no: 9, name: 'ヒツジ窓際部長', role: '部長（窓際）',
         title: 'ステージ9: ヒツジ窓際部長',
         hint: '🐑 眠そうでも油断禁物。暗転前の手を覚えておけ！',
-        bg: 'backgrounds/background_meeting_room.png',
+        bg: 'backgrounds/background_meeting_room.webp',
         label: '古参の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 4,
         promotion: 'コンプラ通過者 → 窓際見習い 💤',
         next: '次は【サル常務取締役】の猿真似コピーだ……',
         imgs: {
-            normal: 'characters/sheep/sheep_normal.png',
-            happy:  'characters/sheep/sheep_happy.png',
-            angry:  'characters/sheep/sheep_angry.png',
+            normal: 'characters/sheep/sheep_normal.webp',
+            happy:  'characters/sheep/sheep_happy.webp',
+            angry:  'characters/sheep/sheep_angry.webp',
         },
         dialogue: {
             intro: 'あら…ネコくんかい……zzz……なに、俺に挑戦しに来たの……',
@@ -907,14 +907,14 @@ const STAGES = [
         key: 'monkey', no: 10, name: 'サル常務取締役', role: '常務取締役',
         title: 'ステージ10: サル常務取締役',
         hint: '🐒 前回出した手を真似してくる。自分の行動が武器だ！',
-        bg: 'backgrounds/background_senior_executive_office重役室.png',
+        bg: 'backgrounds/background_senior_executive_office重役室.webp',
         label: '常務の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 4,
         promotion: '窓際見習い → 企画防衛担当 💡',
         next: '次は【イヌ専務取締役】の忠誠心テストだ……',
         imgs: {
-            normal: 'characters/monkey/monkey_normal.png',
-            happy:  'characters/monkey/monkey_happy.png',
-            angry:  'characters/monkey/monkey_angry.png',
+            normal: 'characters/monkey/monkey_normal.webp',
+            happy:  'characters/monkey/monkey_happy.webp',
+            angry:  'characters/monkey/monkey_angry.webp',
         },
         dialogue: {
             intro: 'ほう、新入りか。……',
@@ -927,14 +927,14 @@ const STAGES = [
         key: 'dog', no: 11, name: 'イヌ専務取締役', role: '専務取締役',
         title: 'ステージ11: イヌ専務取締役',
         hint: '🐕 社長ゆかりのアイテム＝じゃんけんの手。対応表を覚えろ！',
-        bg: 'backgrounds/background_senior_executive_office重役室.png',
+        bg: 'backgrounds/background_senior_executive_office重役室.webp',
         label: '専務の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 4,
         promotion: '企画防衛担当 → 社長室前通行証保持者 🦴',
         next: '最後は【タツ社長】。理不尽の本丸だ……',
         imgs: {
-            normal: 'characters/dog/dog_normal.png',
-            happy:  'characters/dog/dog_happy.png',
-            angry:  'characters/dog/dog_angry.png',
+            normal: 'characters/dog/dog_normal.webp',
+            happy:  'characters/dog/dog_happy.webp',
+            angry:  'characters/dog/dog_angry.webp',
         },
         dialogue: {
             intro: '社長への道は俺が守る！お前ごときに社長にお会いさせるものか！！',
@@ -947,14 +947,14 @@ const STAGES = [
         key: 'dragon', no: 12, name: 'タツ社長', role: '代表取締役社長',
         title: 'ステージ12: タツ社長',
         hint: '🐉 社長はルールそのもの。最後の命令だけ信じろ！',
-        bg: 'backgrounds/background_executive_office_employee_view社長室.png',
+        bg: 'backgrounds/background_executive_office_employee_view社長室.webp',
         label: '社長の手 👇', activeMs: STAGE_ACTIVE_MS, flashN: 5,
         promotion: '社長室前通行証保持者 → 干支入り！🏆',
         next: '全上司を接待しきった！',
         imgs: {
-            normal: 'characters/dragon/dragon_normal.png',
-            happy:  'characters/dragon/dragon_happy.png',
-            angry:  'characters/dragon/dragon_angry.png',
+            normal: 'characters/dragon/dragon_normal.webp',
+            happy:  'characters/dragon/dragon_happy.webp',
+            angry:  'characters/dragon/dragon_angry.webp',
         },
         dialogue: {
             intro:       '我が社に必要なのは気合と忖度だ。お前のその根性、試してやろう',
@@ -968,11 +968,11 @@ const STAGES = [
 
 // ── キャラ画像 ─────────────────────────────────────────────────
 const CAT_IMGS = {
-    normal: 'characters/cat/cat_normal.png',
-    win:    'characters/cat/cat_win.png',
-    lose:   'characters/cat/cat_lose.png',
-    dogeza: 'characters/cat/cat_dogeza.png',
-    fired:  'characters/cat/cat_fired.png',
+    normal: 'characters/cat/cat_normal.webp',
+    win:    'characters/cat/cat_win.webp',
+    lose:   'characters/cat/cat_lose.webp',
+    dogeza: 'characters/cat/cat_dogeza.webp',
+    fired:  'characters/cat/cat_fired.webp',
 };
 // ── State ──────────────────────────────────────────────────────
 let gs;
@@ -983,52 +983,52 @@ let endingIndex = 0;
 
 const OPENING_PANELS = [
     {
-        img: 'opening/panels/opening_01_cat_arrives.png',
+        img: 'opening/panels/opening_01_cat_arrives.webp',
         speaker: 'ナレーション',
         line: 'ここは、十二支建設。今日も現場は、朝から大忙し。',
     },
     {
-        img: 'opening/panels/opening_02_rat_appears_v3.png',
+        img: 'opening/panels/opening_02_rat_appears_v3.webp',
         speaker: 'ネズミ先輩',
         line: 'お、ネコ。\nちょうどいいところに来たな',
     },
     {
-        img: 'opening/panels/opening_03_rat_explains.png',
+        img: 'opening/panels/opening_03_rat_explains.webp',
         speaker: 'ネズミ先輩',
         line: 'うちで出世したいなら、\nまず覚えることがある',
     },
     {
-        img: 'opening/panels/opening_03_rat_explains.png',
+        img: 'opening/panels/opening_03_rat_explains.webp',
         speaker: 'ネコ社員',
         line: '安全確認ですか？',
     },
     {
-        img: 'opening/panels/opening_04_settai_janken_reveal.png',
+        img: 'opening/panels/opening_04_settai_janken_reveal.webp',
         speaker: 'ネズミ先輩',
         line: '違う。\n接待じゃんけんだ',
     },
     {
-        img: 'opening/panels/opening_05_rule_is_not_simple.png',
+        img: 'opening/panels/opening_05_rule_is_not_simple.webp',
         speaker: 'ネズミ先輩',
         line: '勝てばいいってもんじゃない。\n負ければいいってもんでもない',
     },
     {
-        img: 'opening/panels/opening_05_rule_is_not_simple.png',
+        img: 'opening/panels/opening_05_rule_is_not_simple.webp',
         speaker: 'ネコ社員',
         line: 'え、じゃあ何を出せば……',
     },
     {
-        img: 'opening/panels/opening_06_read_the_room.png',
+        img: 'opening/panels/opening_06_read_the_room.webp',
         speaker: 'ネズミ先輩',
         line: '上司の顔色を見ろ。\n指示を聞け。空気を読め',
     },
     {
-        img: 'opening/panels/opening_06_read_the_room.png',
+        img: 'opening/panels/opening_06_read_the_room.webp',
         speaker: 'ネコ社員',
         line: 'それ、じゃんけんですか？',
     },
     {
-        img: 'opening/panels/opening_07_long_day_begins.png',
+        img: 'opening/panels/opening_07_long_day_begins.webp',
         speaker: 'ナレーション',
         line: 'ネコ社員の、長い一日が始まる。',
     },
@@ -1036,27 +1036,27 @@ const OPENING_PANELS = [
 
 const ENDING_PANELS = [
     {
-        img: 'ending/panels/ending_01_dragon_grants.png',
+        img: 'ending/panels/ending_01_dragon_grants.webp',
         speaker: 'タツ社長',
         line: '……干支に、入れてやろう',
     },
     {
-        img: 'ending/panels/ending_02_cat_reacts.png',
+        img: 'ending/panels/ending_02_cat_reacts.webp',
         speaker: 'ネコ社員',
         line: 'えっ、ほんまですか！？',
     },
     {
-        img: 'ending/panels/ending_03_all_bosses.png',
+        img: 'ending/panels/ending_03_all_bosses.webp',
         speaker: 'ナレーション',
         line: 'こうしてネコ社員は、\n全上司への接待をやり切った。',
     },
     {
-        img: 'ending/panels/ending_04_rat_wrapup.png',
+        img: 'ending/panels/ending_04_rat_wrapup.webp',
         speaker: 'ネズミ先輩',
         line: 'まさか本当に上まで行くとはな。\n……まあ、明日からも現場はあるけどな',
     },
     {
-        img: 'ending/panels/ending_05_tomorrow.png',
+        img: 'ending/panels/ending_05_tomorrow.webp',
         speaker: 'ナレーション',
         line: 'ネコ社員の一日は終わった。\nそして、十二支建設の朝はまた来る。',
     },
